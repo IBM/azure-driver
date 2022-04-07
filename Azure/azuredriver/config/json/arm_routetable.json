@@ -1,0 +1,37 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.4.1272.37030",
+      "templateHash": "10896643073833376564"
+    }
+  },
+  "parameters": {
+    "route_table_name": {
+      "type": "string",
+      "defaultValue": "testrt"
+    },
+    "route_table_location": {
+      "type": "string",
+      "defaultValue": "centralindia"
+    },
+    "route_tables_disable_bgp_route_propagation": {
+      "type": "bool",
+      "defaultValue": false
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/routeTables",
+      "apiVersion": "2020-11-01",
+      "name": "[parameters('route_table_name')]",
+      "location": "[parameters('route_table_location')]",
+      "properties": {
+        "disableBgpRoutePropagation": "[parameters('route_tables_disable_bgp_route_propagation')]",
+        "routes": []
+      }
+    }
+  ]
+}

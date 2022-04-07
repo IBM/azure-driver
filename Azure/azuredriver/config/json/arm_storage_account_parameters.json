@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storage_account_type": {
+            "value": "{{storage_account_type}}"
+        },
+        "storage_location": {
+            "value": "{{storage_location}}"
+        },
+        "storage_account_name": {
+            "value": "{{storage_account_name | lower}}{{ range(1, 51) | random }}"
+        }
+    }
+}

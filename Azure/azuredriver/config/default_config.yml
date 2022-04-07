@@ -1,0 +1,9 @@
+---
+application:
+  port: 7275
+  ssl:
+    enabled: True
+    cert_dir: /var/azuredriver/certs
+
+messaging:
+  connection_address: kafka:9092

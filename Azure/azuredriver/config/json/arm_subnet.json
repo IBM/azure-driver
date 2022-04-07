@@ -1,0 +1,61 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.4.1272.37030",
+      "templateHash": "15804593055466857235"
+    }
+  },
+  "parameters": {
+    "vnet_name": {
+      "type": "string",
+      "defaultValue": "vnet"
+    },
+    "subnet_name": {
+      "type": "string",
+      "defaultValue": "vnetsubnet"
+    },
+    "subnet_private_network_endpoint_policies": {
+      "type": "string",
+      "defaultValue": "Enabled"
+    },
+    "subnet_private_link_service_network_policies": {
+      "type": "string",
+      "defaultValue": "Enabled"
+    },
+    "subnet_cidr_block": {
+      "type": "string",
+      "defaultValue": "10.0.2.0/24"
+    },
+    "route_table_name": {
+      "type": "string",
+      "defaultValue": "testrt"
+    },
+    "nsg_name": {
+      "type": "string",
+      "defaultValue": "mdnnsg"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks/subnets",
+      "apiVersion": "2020-11-01",
+      "name": "[format('{0}/{1}', parameters('vnet_name'), parameters('subnet_name'))]",
+      "properties": {
+        "addressPrefix": "[parameters('subnet_cidr_block')]",
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsg_name'))]"
+        },
+        "routeTable": {
+          "id": "[resourceId('Microsoft.Network/routeTables', parameters('route_table_name'))]"
+        },
+        "serviceEndpoints": [],
+        "delegations": [],
+        "privateEndpointNetworkPolicies": "[parameters('subnet_private_network_endpoint_policies')]",
+        "privateLinkServiceNetworkPolicies": "[parameters('subnet_private_link_service_network_policies')]"
+      }
+    }
+  ]
+}

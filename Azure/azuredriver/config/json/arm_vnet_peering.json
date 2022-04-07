@@ -1,0 +1,69 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.4.1272.37030",
+      "templateHash": "7668211674160764739"
+    }
+  },
+  "parameters": {
+    "initiator_vnet_name": {
+      "type": "string",
+      "defaultValue": "svnet"
+    },
+    "acceptor_vnet_name": {
+      "type": "string",
+      "defaultValue": "pvnet"
+    },
+    "peering_state": {
+      "type": "string",
+      "defaultValue": "Connected"
+    },
+    "allow_virtual_network_access": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "allow_forwarded_traffic": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "allow_gateway_transit": {
+      "type": "bool",
+      "defaultValue": false
+    },
+    "use_remote_gateways": {
+      "type": "bool",
+      "defaultValue": false
+    },
+    "acceptor_vnet_rg_name": {
+      "type": "string",
+      "defaultValue": "mdnrg"
+    },
+    "acceptor_vnet_subscription_id": {
+      "type": "string",
+      "defaultValue": "fe42dccb-7208-4832-9ae1-694b971a67a0"
+    }
+  },
+  "variables": {
+    "acceptor_vnet_id": "[format('/subscriptions/{0}/resourceGroups/{1}/providers/Microsoft.Network/virtualNetworks/{2}', parameters('acceptor_vnet_subscription_id'), parameters('acceptor_vnet_rg_name'), parameters('acceptor_vnet_name'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+      "apiVersion": "2020-11-01",
+      "name": "[format('{0}/{1}-to-{2}', parameters('initiator_vnet_name'), parameters('initiator_vnet_name'), parameters('acceptor_vnet_name'))]",
+      "properties": {
+        "peeringState": "[parameters('peering_state')]",
+        "remoteVirtualNetwork": {
+          "id": "[variables('acceptor_vnet_id')]"
+        },
+        "allowVirtualNetworkAccess": "[parameters('allow_virtual_network_access')]",
+        "allowForwardedTraffic": "[parameters('allow_forwarded_traffic')]",
+        "allowGatewayTransit": "[parameters('allow_gateway_transit')]",
+        "useRemoteGateways": "[parameters('use_remote_gateways')]"
+      }
+    }
+  ]
+}

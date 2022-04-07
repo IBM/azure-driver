@@ -1,0 +1,36 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "network_security_group_name": {
+      "value": "{{network_security_group_name}}"
+    },
+    "nsg_rule_name": {
+      "value": "{{nsg_rule_name}}"
+    },
+    "priority": {
+      "value": {{priority}}
+    },
+    "access": {
+      "value": "{{access}}"
+    },
+    "destination_address_prefixes": {
+      "value": "{{destination_address_prefixes}}"
+    },
+    "destination_port_range": {
+      "value": "{{destination_port_range}}"
+    },
+    "source_port_range": {
+      "value": "{{source_port_range}}"
+    },
+    "source_address_prefixes": {
+      "value": "{{source_address_prefixes}}"
+    },
+    "direction": {
+      "value": "{{direction}}"
+    },
+    "protocol": {
+      "value": "{{protocol}}"
+    }
+  }
+}

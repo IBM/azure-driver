@@ -1,0 +1,70 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.4.1272.37030",
+      "templateHash": "2873364201888859003"
+    }
+  },
+  "parameters": {
+    "network_security_group_name": {
+      "type": "string",
+      "defaultValue": "Test"
+    },
+    "nsg_rule_name": {
+      "type": "string",
+      "defaultValue": "ruleone"
+    },
+    "priority": {
+      "type": "int",
+      "defaultValue": 1000
+    },
+    "access": {
+      "type": "string",
+      "defaultValue": "Allow"
+    },
+    "destination_address_prefixes": {
+      "type": "string",
+      "defaultValue": "*"
+    },
+    "destination_port_ranges": {
+      "type": "string",
+      "defaultValue": "2426"
+    },
+    "source_port_ranges": {
+      "type": "string",
+      "defaultValue": "*"
+    },
+    "source_address_prefixes": {
+      "type": "string",
+      "defaultValue": "*"
+    },
+    "direction": {
+      "type": "string",
+      "defaultValue": "Inbound"
+    },
+    "protocol": {
+      "type": "string",
+      "defaultValue": "Tcp"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+      "apiVersion": "2020-11-01",
+      "name": "[format('{0}/{1}', parameters('network_security_group_name'), parameters('nsg_rule_name'))]",
+      "properties": {
+        "protocol": "[parameters('protocol')]",
+        "sourcePortRange": "[parameters('source_port_ranges')]",
+        "destinationPortRange": "[parameters('destination_port_ranges')]",
+        "sourceAddressPrefix": "[parameters('source_address_prefixes')]",
+        "destinationAddressPrefix": "[parameters('destination_address_prefixes')]",
+        "access": "[parameters('access')]",
+        "priority": "[parameters('priority')]",
+        "direction": "[parameters('direction')]"
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "route_table_location": {
+            "value": "{{route_table_location}}"
+        },
+        "route_table_name": {
+            "value": "{{route_table_name}}"
+        },
+        "route_table_disable_bgp_route_propagation": {
+            "value": {{route_table_disable_bgp_route_propagation | tojson}}
+        }
+    }
+}

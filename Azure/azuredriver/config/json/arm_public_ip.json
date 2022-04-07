@@ -1,0 +1,62 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.4.1272.37030",
+      "templateHash": "7888266193125705807"
+    }
+  },
+  "parameters": {
+    "public_ip_address_name": {
+      "type": "string",
+      "defaultValue": "mdnpubipnew"
+    },
+    "public_ip_location": {
+      "type": "string",
+      "defaultValue": "centralindia"
+    },
+    "public_ip_address_version": {
+      "type": "string",
+      "defaultValue": "IPv4"
+    },
+    "public_ip_allocation_method": {
+      "type": "string",
+      "defaultValue": "Static"
+    },
+    "public_ip_sku_type_name": {
+      "type": "string",
+      "defaultValue": "Standard"
+    },
+    "public_ip_sku_tier_name": {
+      "type": "string",
+      "defaultValue": "Regional"
+    },
+    "public_ip_zones": {
+      "type": "string",
+      "defaultValue": "1"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2020-11-01",
+      "name": "[parameters('public_ip_address_name')]",
+      "location": "[parameters('public_ip_location')]",
+      "sku": {
+        "name": "[parameters('public_ip_sku_type_name')]",
+        "tier": "[parameters('public_ip_sku_tier_name')]"
+      },
+      "zones": [
+        "[parameters('public_ip_zones')]"
+      ],
+      "properties": {
+        "publicIPAddressVersion": "[parameters('public_ip_address_version')]",
+        "publicIPAllocationMethod": "[parameters('public_ip_allocation_method')]",
+        "idleTimeoutInMinutes": 4,
+        "ipTags": []
+      }
+    }
+  ]
+}

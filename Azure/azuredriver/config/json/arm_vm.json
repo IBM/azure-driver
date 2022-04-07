@@ -1,0 +1,165 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.4.1272.37030",
+      "templateHash": "1165779070914578539"
+    }
+  },
+  "parameters": {
+    "vm_network_security_group_name": {
+      "type": "string",
+      "defaultValue": "mdnnsg"
+    },
+    "vm_network_interface_name": {
+      "type": "string",
+      "defaultValue": "mdnnic"
+    },
+    "vm_name": {
+      "type": "string",
+      "defaultValue": "mdnvmnew"
+    },
+    "vm_location": {
+      "type": "string",
+      "defaultValue": "centralindia"
+    },
+    "vm_zone": {
+      "type": "string",
+      "defaultValue": "1"
+    },
+    "vm_hardware_profile": {
+      "type": "string",
+      "defaultValue": "Standard_B1s"
+    },
+    "vm_image_publisher": {
+      "type": "string",
+      "defaultValue": "canonical"
+    },
+    "vm_image_flavor": {
+      "type": "string",
+      "defaultValue": "0001-com-ubuntu-server-focal"
+    },
+    "vm_image_version": {
+      "type": "string",
+      "defaultValue": "20_04-lts-gen2"
+    },
+    "vm_os_disk_type": {
+      "type": "string",
+      "defaultValue": "Linux"
+    },
+    "vm_os_disk_storage_type": {
+      "type": "string",
+      "defaultValue": "StandardSSD_LRS"
+    },
+    "vm_os_disk_size": {
+      "type": "int",
+      "defaultValue": 30
+    },
+    "vm_data_disk_storage_type": {
+      "type": "string",
+      "defaultValue": "StandardSSD_LRS"
+    },
+    "vm_data_disk_size": {
+      "type": "int",
+      "defaultValue": 8
+    },
+    "vm_computer_name": {
+      "type": "string",
+      "defaultValue": "mdnvmone"
+    },
+    "vm_admin_username": {
+      "type": "string",
+      "defaultValue": "mdnuser"
+    },
+    "vm_admin_password": {
+      "type": "secureString",
+      "defaultValue": "mDN@123456789"
+    }
+  },
+  "variables": {
+    "netinterfaceid": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkInterfaces', parameters('vm_network_interface_name'))]",
+    "nsgId": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('vm_network_security_group_name'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2021-11-01",
+      "name": "[parameters('vm_name')]",
+      "location": "[parameters('vm_location')]",
+      "zones": [
+        "[parameters('vm_zone')]"
+      ],
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('vm_hardware_profile')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[parameters('vm_image_publisher')]",
+            "offer": "[parameters('vm_image_flavor')]",
+            "sku": "[parameters('vm_image_version')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "osType": "Linux",
+            "name": "[format('{0}_osdisk', parameters('vm_name'))]",
+            "createOption": "FromImage",
+            "caching": "ReadWrite",
+            "managedDisk": {
+              "storageAccountType": "[parameters('vm_os_disk_storage_type')]"
+            },
+            "deleteOption": "Delete",
+            "diskSizeGB": "[parameters('vm_os_disk_size')]"
+          },
+          "dataDisks": [
+            {
+              "lun": 0,
+              "name": "[format('{0}_data_disk', parameters('vm_name'))]",
+              "createOption": "Empty",
+              "caching": "None",
+              "writeAcceleratorEnabled": false,
+              "managedDisk": {
+                "storageAccountType": "[parameters('vm_data_disk_storage_type')]"
+              },
+              "deleteOption": "Delete",
+              "diskSizeGB": "[parameters('vm_data_disk_size')]",
+              "toBeDetached": false
+            }
+          ]
+        },
+        "osProfile": {
+          "computerName": "[parameters('vm_computer_name')]",
+          "adminUsername": "[parameters('vm_admin_username')]",
+          "adminPassword": "[parameters('vm_admin_password')]",
+          "linuxConfiguration": {
+            "disablePasswordAuthentication": false,
+            "provisionVMAgent": true,
+            "patchSettings": {
+              "patchMode": "ImageDefault",
+              "assessmentMode": "ImageDefault"
+            }
+          },
+          "secrets": [],
+          "allowExtensionOperations": true
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[variables('netinterfaceid')]",
+              "properties": {
+                "deleteOption": "Delete"
+              }
+            }
+          ]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": true
+          }
+        }
+      }
+    }
+  ]
+}
