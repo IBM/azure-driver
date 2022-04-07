@@ -99,7 +99,12 @@ class ResourceDriverHandler(Service, ResourceDriverHandlerCapability):
                 method_name = 'create'
             method = getattr(handler, method_name)
             if method is not None:
-                return method(resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location)
+                try:
+                    return method(resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location)
+                except Exception as e:
+                    #Delete resource group in case of any failure in creation.
+                    # azure_location.resourcemanager_driver.delete_resourcegroup(name=resource_properties.get('resourcegroup_name'))
+                    raise
             else:
                 raise InvalidRequestError(f'Handler does not support lifecycle {lifecycle_name}')
         finally:
