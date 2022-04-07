@@ -23,7 +23,7 @@ cp dist/azuredriver-0.0.1-py3-none-any.whl docker/whls/
 
 
 pushd docker
-docker build -t azure-driver:0.0.1 .
+docker build -t azure-driver:0.0.1.azure-driver .
 popd
 
 pushd helm
