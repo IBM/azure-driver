@@ -1,5 +1,0 @@
-
-
-class StackNotFoundError(Exception):
-    pass
-

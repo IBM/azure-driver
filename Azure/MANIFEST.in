@@ -1,5 +1,0 @@
-include azuredriver/pkg_info.json
-include azuredriver/config/*.yaml
-include azuredriver/config/*.yml
-include azuredriver/config/json/*.json
-include azuredriver/bin/*
