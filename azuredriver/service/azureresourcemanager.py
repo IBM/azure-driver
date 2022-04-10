@@ -144,6 +144,8 @@ class AzureResourceManager():
                 if system_properties.get('resourceType', None) == 'resource::AzureResourceGroup::1.0':
                     stack_id = resourcemanager_driver.create_resourcegroup(resource_properties.get('resourcegroup_name'), resource_properties.get('resourcegroup_location'))
                 else:
+                    if resource_name.__contains__("vnet_peering"):
+                        azure_location.set_resource_group_name(resource_properties.get('initiator_vnet_rg_name'))
                     stack_name = self.get_stack_name(resource_id, resource_name)
                     arm_template, arm_parameters = self.prepare_deployment_artifacts(system_properties, resource_properties, request_properties, template_file_name, params_file_name)
                     stack_id = resourcemanager_driver.create_deployment(stack_name, arm_template, arm_parameters)
