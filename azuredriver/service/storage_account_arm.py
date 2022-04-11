@@ -30,9 +30,8 @@ class StorageAccountResourceManager(AzureResourceManager):
         return system_properties['resourceName']
   
     def validate_storage_account_name(self, storage_account_name):
-        storage_account_name_len = len(storage_account_name)
-        if (storage_account_name_len < 3 or storage_account_name_len > 24) or not storage_account_name.isalnum():
-            raise ValueError('Invalid storage account name value provided. Storage account name must be between 3 and 24 characters in length and use numbers and lower-case letters only')
+        if not storage_account_name.isalnum():
+            raise ValueError('Invalid storage account name value provided. Use numbers and lower-case letters only')
         
 
 

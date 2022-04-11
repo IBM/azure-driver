@@ -55,9 +55,8 @@ class NSGResourceManager(AzureResourceManager):
     #     return system_properties['resourceName']
 
     def validate_name(self, nsg_name):
-        nsg_name_len = len(nsg_name)
-        if (nsg_name_len < 1 or nsg_name_len > 80) or (not bool(re.match('^[a-zA-Z0-9\-_.]*$', nsg_name))):
-            raise ValueError('Invalid network security group name value provided. Network security group name must be between 1 and 80 characters in length and use numbers, letters and special characters like (-_.) only')
+        if (not bool(re.match('^[a-zA-Z0-9\-_.]*$', nsg_name))):
+            raise ValueError('Invalid network security group name value provided. Use numbers, letters and special characters like (-_.) only')
          
          
     # def __is_skip_internetrule_required(self, rmclient, network_security_group_name, subnet_name, private_or_public):

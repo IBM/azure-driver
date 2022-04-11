@@ -9,7 +9,7 @@
             "value": "{{storage_location}}"
         },
         "storage_account_name": {
-            "value": "{{storage_account_name | lower}}{{ range(1, 51) | random }}"
+            "value": "{% if storage_account_name|length > 22 %}{{storage_account_name[:22] | lower}}{{ range(1, 51) | random }}{% else %}{{storage_account_name | lower}}{{ range(1, 51) | random }}{% endif %}"
         }
     }
 }
