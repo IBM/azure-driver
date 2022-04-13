@@ -22,7 +22,7 @@
       "value": "{{vnet_default_cidr_block}}"
     },
     "vnet_address_space": {
-      "value": {{vnet_address_space | tojson}}
+      "value": {{vnet_address_space.split(',') | tojson}}
     }
   }
 }
