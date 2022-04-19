@@ -23,7 +23,7 @@ cp dist/azuredriver-0.0.1-py3-none-any.whl docker/whls/
 
 
 pushd docker
-IMAGE_TAG="azure-driver:0.0.2-"$(date +%Y%m%d_%H%M%S)
+IMAGE_TAG="azure-driver:0.0.2-dev-"$(date +%Y%m%d_%H%M%S)
 docker build -t $IMAGE_TAG .
 popd
 
