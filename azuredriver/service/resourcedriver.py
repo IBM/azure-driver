@@ -137,13 +137,6 @@ class ResourceDriverHandler(Service, ResourceDriverHandlerCapability):
                 deployment = resourcemanager_driver.get_deployment(stack_id)
                 logger.info('Request Type: %s', request_type)
                 logger.info(deployment.properties.output_resources)
-                if isVnetPeering and request_type == DELETE_REQUEST_PREFIX:
-                    logger.info('Inside Vnet Peering')
-                    try:
-                        vnetpeering = resourcemanager_driver.get_vnetpeering(get_resource_name_from_stackid(stack_id, "resourceGroups"), get_resource_name_from_stackid(stack_id, "virtualNetworks"), get_resource_name_from_stackid(stack_id, "virtualNetworkPeerings"))
-                    except StackNotFoundError as e:
-                        if deployment is None:
-                            raise
 
             logger.debug('Stack found: %s', deployment)
         except StackNotFoundError as e:
