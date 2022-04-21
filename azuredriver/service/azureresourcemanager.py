@@ -190,6 +190,7 @@ class AzureResourceManager():
                         deployment = azure_location.resourcemanager_driver.get_deployment(stack_id)
                         vnet_peering_id = deployment.properties.output_resources[0].id if deployment is not None else None
                         if vnet_peering_id is not None:
+                            azure_location.set_resource_group_name(resource_properties.get('initiator_vnet_rg_name'))
                             vnet_peering_delete_response = azure_location.resourcemanager_driver.delete_vnetpeering(resource_properties.get('initiator_vnet_rg_name'), resource_properties.get('initiator_vnet_name'), self.get_vnet_peering_name(resource_properties.get('initiator_vnet_name'), resource_properties.get('acceptor_vnet_name')))
                     delete_response = azure_location.resourcemanager_driver.delete_deployment(stack_id)
                     
