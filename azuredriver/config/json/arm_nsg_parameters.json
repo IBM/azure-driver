@@ -13,6 +13,9 @@
         },
         "local_or_global": {
             "value": "{{local_or_global}}"
+        },
+        "vnet_address_space": {
+            "value": "{{vnet_address_space}}"
         }
     }
 }
