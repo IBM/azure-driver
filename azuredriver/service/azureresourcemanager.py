@@ -141,15 +141,10 @@ class AzureResourceManager():
                     self.validate_deployment_properties(resource_name, resource_properties, kwargs['properties_to_validate'])
                 
                 # create resource/deployment
-                if system_properties.get('resourceType', None) == 'resource::AzureResourceGroup::1.0':
-                    stack_id = resourcemanager_driver.create_resourcegroup(resource_properties.get('resourcegroup_name'), resource_properties.get('resourcegroup_location'))
-                else:
-                    if resource_name.__contains__("vnet_peering"):
-                        azure_location.set_resource_group_name(resource_properties.get('initiator_vnet_rg_name'))
-                    stack_name = self.get_stack_name(resource_id, resource_name)
-                    arm_template, arm_parameters = self.prepare_deployment_artifacts(system_properties, resource_properties, request_properties, template_file_name, params_file_name)
-                    stack_id = resourcemanager_driver.create_deployment(stack_name, arm_template, arm_parameters)
-                    logger.info(f'stack_name={stack_name} resource_name={resource_name} arm_template={arm_template} arm_parameters={arm_parameters}')
+                stack_name = self.get_stack_name(resource_id, resource_name)
+                arm_template, arm_parameters = self.prepare_deployment_artifacts(system_properties, resource_properties, request_properties, template_file_name, params_file_name)
+                stack_id = resourcemanager_driver.create_deployment(stack_name, arm_template, arm_parameters)
+                logger.info(f'stack_name={stack_name} resource_name={resource_name} arm_template={arm_template} arm_parameters={arm_parameters}')
                 
                 logger.info(f'Created Stack Id: {stack_id}')
             except Exception as e:
@@ -180,6 +175,7 @@ class AzureResourceManager():
         if stack_id is not None:
             logger.info(f'Removing stack {stack_id} for resource_id: {resource_id}, lifecycle_name: {lifecycle_name}, system_properties: {system_properties} resource_properties: {resource_properties} request_properties: {request_properties} associated_topology: {associated_topology} aws_location: {azure_location}')
             azure_location.set_resource_group_name(resource_properties.get('resourcegroup_name'))
+            request_id = build_request_id(DELETE_REQUEST_PREFIX, stack_id)
             try:
                 if 'properties_to_validate' in kwargs:
                     self.validate_deployment_properties(resource_name, resource_properties, kwargs['properties_to_validate'])
@@ -191,20 +187,21 @@ class AzureResourceManager():
                         vnet_peering_id = deployment.properties.output_resources[0].id if deployment is not None else None
                         if vnet_peering_id is not None:
                             azure_location.set_resource_group_name(resource_properties.get('initiator_vnet_rg_name'))
-                            vnet_peering_delete_response = azure_location.resourcemanager_driver.delete_vnetpeering(resource_properties.get('initiator_vnet_rg_name'), resource_properties.get('initiator_vnet_name'), self.get_vnet_peering_name(resource_properties.get('initiator_vnet_name'), resource_properties.get('acceptor_vnet_name')))
+                            azure_location.resourcemanager_driver.delete_vnetpeering(resource_properties.get('initiator_vnet_rg_name'), resource_properties.get('initiator_vnet_name'), self.get_vnet_peering_name(resource_properties.get('initiator_vnet_name'), resource_properties.get('acceptor_vnet_name')))
                     delete_response = azure_location.resourcemanager_driver.delete_deployment(stack_id)
                     
                 if delete_response is None:
                     raise InfrastructureNotFoundError(f'Stack {stack_id} not found')
                 logger.info(f'Stack {stack_id} deletion response: {delete_response}')
-                request_id = build_request_id(DELETE_REQUEST_PREFIX, stack_id)
+                
+            except StackNotFoundError as e:
+                return LifecycleExecuteResponse(build_request_id(DELETE_REQUEST_PREFIX, 'SKIP'))
             except Exception as e:
                 raise ResourceDriverError(str(e)) from e
         else:
             # nothing to do
             logger.info(f'No stack_id in associated topology for resource with id: {resource_id} name: {resource_name} lifecycle_name: {lifecycle_name}')
             request_id = build_request_id(CREATE_REQUEST_PREFIX, 'SKIP')
-
 
         return LifecycleExecuteResponse(request_id)
     
