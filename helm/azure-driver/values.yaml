@@ -9,7 +9,7 @@ global:
 docker:
   ## Make this the full path, including registry host and port if using one
   image: azure-driver
-  version: 0.0.1
+  version: 0.0.2
   imagePullPolicy: IfNotPresent
 
 ## Configuration for the application deployment
@@ -34,7 +34,7 @@ app:
       WSGI_CONTAINER: gunicorn
       ## the number of processes and threads to spawn to handle requests
       NUM_PROCESSES: "4"
-      NUM_THREADS: "2"
+      NUM_THREADS: "4"
 
     ## default_config.yml (driver configuration) overrides
     override:

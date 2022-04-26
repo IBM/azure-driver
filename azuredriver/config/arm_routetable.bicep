@@ -19,14 +19,10 @@ resource routeTables 'Microsoft.Network/routeTables@2020-11-01' = {
   }
 }
 
-resource routeTable 'Microsoft.Network/routeTables@2020-11-01' existing = {
-  name: route_table_name
-}
-
 
 resource branchofficeroute 'Microsoft.Network/routeTables/routes@2020-11-01' = if ((private_or_public == 'private') && (local_or_global == 'global')) {
   name: 'BranchOfficeRoute'
-  parent: routeTable
+  parent: routeTables
   properties: {
     addressPrefix: branch_office_cidr
     hasBgpOverride: route_table_disable_bgp_route_propagation

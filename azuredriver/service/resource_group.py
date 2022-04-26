@@ -13,16 +13,34 @@ logger = logging.getLogger(__name__)
 
 class ResourceGroupResourceManager(AzureResourceManager):
     logger.info("Loading ResourceGroup")
-    # Will create a VPC using a Cloudformation template
-    def create(self, resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location):
+    
+    def create(self, resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location):        
         logger.info(f'resource_id={resource_id} system_properties={system_properties} resource_properties={resource_properties} request_properties={request_properties}')
         self.validate_name(resource_properties.get('resourcegroup_name'))
-        return super().create(resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location, None, None)
+        stack_id = self.get_stack_id(resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location)
+        if stack_id is None:
+            resourcemanager_driver = azure_location.resourcemanager_driver
+            # Create resource name
+            resource_name = self.__create_resource_name(system_properties)
+            try:                
+                # create resource/deployment
+                stack_id = resourcemanager_driver.create_resourcegroup(resource_properties.get('resourcegroup_name'), resource_properties.get('resourcegroup_location'))
+                logger.info(f'Created Stack Id: {stack_id}')
+            except Exception as e:
+                raise ResourceDriverError(str(e)) from e
+
+            if stack_id is None:
+                raise ResourceDriverError('Failed to create deployment in azure')
+
+        request_id = build_request_id(CREATE_REQUEST_PREFIX, stack_id)
+        associated_topology = AZUREAssociatedTopology()
+        associated_topology.add_stack_id(resource_name, stack_id)
+        return LifecycleExecuteResponse(request_id, associated_topology=associated_topology)
 
     def remove(self, resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location):
        return super().remove(resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location)
 
-    def __create_resource_name(self, system_properties, resource_properties, resource_name):
+    def __create_resource_name(self, system_properties):
         system_properties['resourceName'] = self.get_resource_name(system_properties)
         return system_properties['resourceName']
   

@@ -347,6 +347,8 @@ class ResourceManagerDriver():
             return del_response
         except HttpResponseError as ex:
             error_message = ex.message
+            if error_message.find('ResourceGroupBeingDeleted') != -1:
+                raise StackNotFoundError('Resource Group is deleting')
             logging.error(f'Failed to delete Azure Deployment, {error_message}')
             raise
             
@@ -403,9 +405,11 @@ class ResourceManagerDriver():
     
     def delete_vnetpeering(self, resource_group_name, virtual_network_name, virtual_network_peering_name):
         try:
-            delete_response = self.nclient.virtual_network_peerings.begin_delete(resource_group_name, virtual_network_name, virtual_network_peering_name)
+            self.nclient.virtual_network_peerings.begin_delete(resource_group_name, virtual_network_name, virtual_network_peering_name)
         except HttpResponseError as ex:
             error_message = ex.message
+            if error_message.find('ResourceGroupBeingDeleted') != -1:
+                raise StackNotFoundError('Resource Group is deleting')
             logging.error(f'Failed to delete Azure Vnet Peering, {error_message}')
             raise
         
