@@ -23,7 +23,7 @@ resource outbound_internet_rule 'Microsoft.Network/networkSecurityGroups/securit
     sourceAddressPrefix: '*'
     destinationAddressPrefix: 'Internet'
     access: 'Deny'
-    priority: 100
+    priority: 300
     direction: 'Outbound'
   }
 }
@@ -38,7 +38,7 @@ resource outbound_vnet_rule_1 'Microsoft.Network/networkSecurityGroups/securityR
     sourceAddressPrefix: 'VirtualNetwork'
     destinationAddressPrefix: 'VirtualNetwork'
     access: 'Deny'
-    priority: 102
+    priority: 500
     direction: 'Outbound'
   }
 }
@@ -53,7 +53,7 @@ resource outbound_vnet_rule_2 'Microsoft.Network/networkSecurityGroups/securityR
     sourceAddressPrefix: vnet_address_space
     destinationAddressPrefix: vnet_address_space
     access: 'Allow'
-    priority: 101
+    priority: 400
     direction: 'Outbound'
   }
 }
@@ -68,7 +68,7 @@ resource inbound_internet_rule 'Microsoft.Network/networkSecurityGroups/security
     sourceAddressPrefix: 'Internet'
     destinationAddressPrefix: vnet_address_space
     access: 'Allow'
-    priority: 105
+    priority: 500
     direction: 'Inbound'
   }
 }
@@ -83,7 +83,7 @@ resource inbound_loadbalancer_rule 'Microsoft.Network/networkSecurityGroups/secu
     sourceAddressPrefix: 'AzureLoadBalancer'
     destinationAddressPrefix: '*'
     access: 'Deny'
-    priority: 106
+    priority: 600
     direction: 'Inbound'
   }
 }
@@ -98,7 +98,7 @@ resource inbound_vnet_rule_1 'Microsoft.Network/networkSecurityGroups/securityRu
     sourceAddressPrefix: vnet_address_space
     destinationAddressPrefix: vnet_address_space
     access: 'Allow'
-    priority: 102
+    priority: 200
     direction: 'Inbound'
   }
 }
@@ -113,7 +113,7 @@ resource inbound_vnet_rule_2 'Microsoft.Network/networkSecurityGroups/securityRu
     sourceAddressPrefix: 'VirtualNetwork'
     destinationAddressPrefix: 'VirtualNetwork'
     access: 'Deny'
-    priority: 103
+    priority: 300
     direction: 'Inbound'
   }
 }
