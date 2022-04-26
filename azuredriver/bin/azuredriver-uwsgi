@@ -6,4 +6,4 @@ else
     PORT="--http :$DRIVER_PORT"
 fi
 
-uwsgi $PORT --master --processes $NUM_PROCESSES --threads $NUM_THREADS --module "azuredriver:create_wsgi_app()"
+uwsgi $PORT --master --processes $NUM_PROCESSES --threads $NUM_THREADS --enable-threads --module "azuredriver:create_wsgi_app()"
