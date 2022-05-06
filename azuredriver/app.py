@@ -1,16 +1,17 @@
-import logging
-import ignition.boot.api as ignition
+'''App Script'''
 import pathlib
 import os
+import ignition.boot.api as ignition
 import azuredriver.config as driverconfig
 from azuredriver.service.resourcedriver import ResourceDriverHandler
 
 
-default_config_dir_path = str(pathlib.Path(driverconfig.__file__).parent.resolve())
-default_config_path = os.path.join(default_config_dir_path, 'default_config.yml')
+DEFAULT_CONFIG_DIR_PATH = str(pathlib.Path(driverconfig.__file__).parent.resolve())
+default_config_path = os.path.join(DEFAULT_CONFIG_DIR_PATH, 'default_config.yml')
 
 
 def create_app():
+    '''This method is used to create app'''
     app_builder = ignition.build_resource_driver('AZURE Driver')
     app_builder.include_file_config_properties(default_config_path, required=True)
     app_builder.include_file_config_properties('./azuredriver_config.yml', required=False)
@@ -23,5 +24,6 @@ def create_app():
 
 
 def init_app():
+    '''This method is used to initialize app'''
     app = create_app()
     return app.run()
