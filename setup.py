@@ -1,10 +1,11 @@
+'''Script for setup'''
 import json
 from setuptools import setup, find_namespace_packages
 
-with open('azuredriver/pkg_info.json') as fp:
+with open('azuredriver/pkg_info.json', encoding="utf-8") as fp:
     _pkg_info = json.load(fp)
 
-with open("DESCRIPTION.md", "r") as description_file:
+with open("DESCRIPTION.md", "r",encoding="utf-8") as description_file:
     long_description = description_file.read()
 
 setup(
