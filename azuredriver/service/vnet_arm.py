@@ -24,6 +24,13 @@ class VNETResourceManager(AzureResourceManager):
         return super().remove(resource_id, lifecycle_name, system_properties,
         resource_properties, request_properties, associated_topology, azure_location)
 
+    def __create_vnet_peering_name(self, system_properties, resource_name, initiator_vnet_name, operation_source_name):
+        resource_name = resource_name.replace('VNetResource', initiator_vnet_name)
+        if operation_source_name is not None:
+            resource_name = resource_name + operation_source_name
+        system_properties['resourceName'] = resource_name
+        return system_properties['resourceName']
+
     def createvnetpeering(self, resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location):
         '''This method is used to create vnet peering'''
         logger.info(
@@ -32,9 +39,9 @@ class VNETResourceManager(AzureResourceManager):
         stack_id = self.get_stack_id(resource_properties, azure_location)
         if stack_id is None:
             resourcemanager_driver = azure_location.resourcemanager_driver
+            initiator_vnet_name = resource_properties.get('initiator_vnet_name')
             # Create resource name
-            resource_name = super().create_resource_name(
-                system_properties, self.get_resource_name(system_properties), "vnet_peering")
+            resource_name = self.__create_vnet_peering_name(system_properties, self.get_resource_name(system_properties), initiator_vnet_name, "peer")
             try:
                 # create resource/deployment
                 azure_location.set_resource_group_name(
@@ -61,9 +68,11 @@ class VNETResourceManager(AzureResourceManager):
         return LifecycleExecuteResponse(request_id, associated_topology=associated_topology)
 
     def removevnetpeering(self, resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location):
-        '''This method is used to remove vnet peering'''
-        super().create_resource_name(system_properties,
-                                     self.get_resource_name(system_properties), None)
-        return super().remove(resource_id, lifecycle_name, system_properties,
-        resource_properties, request_properties, associated_topology,
-        azure_location, operation_name="vnet_peering")
+        initiator_vnet_name = resource_properties.get('initiator_vnet_name')
+        self.__create_vnet_peering_name(system_properties, self.get_resource_name(system_properties), initiator_vnet_name, None)
+       # azure_location.resourcemanager_driver.delete_vnetpeering(resource_properties.get('initiator_vnet_name'), self.__get_vnet_peering_name(resource_properties.get('initiator_vnet_name'), resource_properties.get('acceptor_vnet_name')))
+        return super().remove(resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location, operation_source_name="peer")
+  
+    def get_vnet_peering_name(self, initiator_vnet_name, acceptor_vnet_name):
+        return initiator_vnet_name+"-"+"to"+"-"+acceptor_vnet_name
+    
