@@ -182,7 +182,7 @@ class AzureResourceManager():
                 if system_properties.get('resourceType', None) == 'resource::AzureResourceGroup::1.0':
                     delete_response = azure_location.resourcemanager_driver.delete_resourcegroup(stackId=stack_id)
                 else:
-                    if resource_name.__contains__("vnet_peering"):
+                    if resource_name.__contains__("peer"):
                         deployment = azure_location.resourcemanager_driver.get_deployment(stack_id)
                         vnet_peering_id = deployment.properties.output_resources[0].id if deployment is not None else None
                         if vnet_peering_id is not None:

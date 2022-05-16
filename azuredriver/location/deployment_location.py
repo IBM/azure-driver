@@ -373,6 +373,8 @@ class ResourceManagerDriver():
             return del_response
         except HttpResponseError as ex:
             error_message = ex.message
+            if error_message.find('ResourceGroupNotFound') != -1:
+                raise StackNotFoundError('Resource Group deleted')
             logging.error(f'Failed to delete Azure Resource group, {error_message}')
             raise
         
