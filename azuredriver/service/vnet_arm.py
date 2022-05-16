@@ -31,6 +31,13 @@ class VNETResourceManager(AzureResourceManager):
         system_properties['resourceName'] = resource_name
         return system_properties['resourceName']
 
+    def __create_vnet_peering_name(self, system_properties, resource_name, initiator_vnet_name, operation_source_name):
+        resource_name = resource_name.replace('VNetResource', initiator_vnet_name)
+        if operation_source_name is not None:
+            resource_name = resource_name + operation_source_name
+        system_properties['resourceName'] = resource_name
+        return system_properties['resourceName']
+
     def createvnetpeering(self, resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location):
         '''This method is used to create vnet peering'''
         logger.info(
