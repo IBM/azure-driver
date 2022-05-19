@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "route_table_name": {
+      "value": "{{route_table_name}}"
+    },
+    "route_name": {
+      "value": "{{route_name}}"
+    },
+    "route_next_hop_type": {
+      "value": "{{route_next_hop_type}}"
+    },
+    "route_address_prefix": {
+      "value": "{{route_address_prefix}}"
+    },
+    "route_next_hop_ip_address": {
+      "value": "{{route_next_hop_ip_address}}"
+    },
+    "route_has_bgp_override": {
+      "value": {{route_has_bgp_override}}
+    }
+  }
+}

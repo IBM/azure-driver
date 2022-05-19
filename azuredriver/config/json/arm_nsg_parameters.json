@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "network_security_group_name": {
+            "value": "{% if network_security_group_name|length > 80 %}{{network_security_group_name[:79]}}{% else %}{{network_security_group_name}}{% endif %}"
+        },
+        "network_security_group_location": {
+            "value": "{{network_security_group_location}}"
+        },
+        "private_or_public": {
+            "value": "{{private_or_public}}"
+        },
+        "local_or_global": {
+            "value": "{{local_or_global}}"
+        },
+        "vnet_address_space": {
+            "value": "{{vnet_address_space}}"
+        }
+    }
+}

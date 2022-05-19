@@ -1,0 +1,56 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vm_network_security_group_name": {
+      "value": "{{vm_network_security_group_name}}"
+    },
+    "vm_network_interface_name": {
+      "value": "{{vm_network_interface_name}}"
+    },
+    "vm_name": {
+      "value": "{{vm_name}}"
+    },
+    "vm_location": {
+      "value": "{{vm_location}}"
+    },
+    "vm_zone": {
+      "value": "{{vm_zone}}"
+    },
+    "vm_hardware_profile": {
+      "value": "{{vm_hardware_profile}}"
+    },
+    "vm_image_publisher": {
+      "value": "{{vm_image_publisher}}"
+    },
+    "vm_image_flavor": {
+      "value": "{{vm_image_flavor}}"
+    },
+    "vm_image_version": {
+      "value": "{{vm_image_version}}"
+    },
+    "vm_os_disk_type": {
+      "value": "{{vm_os_disk_type}}"
+    },
+    "vm_os_disk_storage_type": {
+      "value": "{{vm_os_disk_storage_type}}"
+    },
+    "vm_os_disk_size": {
+      "value": {{vm_os_disk_size}}
+    },
+    "vm_data_disk_storage_type": {
+      "value": "{{vm_data_disk_storage_type}}"
+    },
+    "vm_data_disk_size": {
+      "value": {{vm_data_disk_size}}
+    },
+    "vm_computer_name": {
+      "value": "{{vm_computer_name}}"
+    },
+    "vm_admin_username": {
+      "value": "{{vm_admin_username}}"
+    },
+    "vm_admin_password": {
+      "value": "{{vm_admin_password}}"
+    }
+}
