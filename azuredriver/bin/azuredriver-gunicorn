@@ -4,4 +4,4 @@ if [[ $( tr '[:upper:]' '[:lower:]' <<<$SSL_ENABLED ) == "true" ]]; then
     SSL="--certfile /var/azuredriver/certs/tls.crt --keyfile /var/azuredriver/certs/tls.key"
 fi
 
-gunicorn -w $NUM_PROCESSES -b :$DRIVER_PORT $SSL --timeout 300 --graceful-timeout 300 "azuredriver:create_wsgi_app()"
+gunicorn -w $NUM_PROCESSES --threads $NUM_THREADS -b :$DRIVER_PORT $SSL --timeout 300 --graceful-timeout 300 "azuredriver:create_wsgi_app()"

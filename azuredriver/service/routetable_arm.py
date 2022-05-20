@@ -33,15 +33,15 @@ class RouteTableResourceManager(AzureResourceManager):
         return system_properties['resourceName']
     
     
-    # def addsubnetroute(self, resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location):
-    #     logger.info("Adding route started")
-    #     skip_create = self.__is_skip_addsubnetroute_required(azure_location.resourcemanager_driver, resource_properties.get('route_name'), resource_properties.get('subnet_name'), resource_properties.get('local_or_global'))
-    #     return super().create(resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location, 'arm_add_routes.json', 'arm_add_routes_parameters.json', properties_to_validate=RouteTableResourceManager.create_subnetroute_properties, operation_source_name="subnet_route", skip_create=skip_create)
+    def addroute(self, resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location):
+        logger.info("Adding route started")
+      #  skip_create = self.__is_skip_addsubnetroute_required(azure_location.resourcemanager_driver, resource_properties.get('route_name'), resource_properties.get('subnet_name'), resource_properties.get('local_or_global'))
+        return super().create(resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location, 'arm_add_routes.json', 'arm_add_routes_parameters.json', properties_to_validate=RouteTableResourceManager.create_subnetroute_properties, operation_source_name="{}{}".format(resource_properties.get('route_name'),"route"))
        
 
-    # def removesubnetroute(self, resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location):
-    #     logger.info("Deleting route started")
-    #     return super().remove(resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location, properties_to_validate=RouteTableResourceManager.remove_subnetroute_properties, operation_source_name="subnet_route")
+    def removeroute(self, resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location):
+        logger.info("Deleting route started")
+        return super().remove(resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location, properties_to_validate=RouteTableResourceManager.remove_subnetroute_properties, operation_source_name="{}{}".format(resource_properties.get('route_name'),"route"))
     
     # def addinternetroute(self, resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location):
     #     logger.info("Adding route started")

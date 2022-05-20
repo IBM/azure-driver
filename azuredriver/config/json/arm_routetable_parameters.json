@@ -10,19 +10,7 @@
         },
         "route_table_disable_bgp_route_propagation": {
             "value": {{route_table_disable_bgp_route_propagation | tojson}}
-        },
-        "private_or_public": {
-            "value": "{{private_or_public}}"
-        },
-        "local_or_global": {
-            "value": "{{local_or_global}}"
-        },
-        "branch_office_cidr": {
-            "value": "{{branch_office_cidr}}"
-        },
-        "private_static_ip": {
-            "value": "{% set ipsegments = subnet_cidr_block.split('.')%}{{ ('{}.{}.{}.{}'.format(ipsegments[0], ipsegments[1], ipsegments[2], '4')) }}"
         }
-  
+        
     }
 }
