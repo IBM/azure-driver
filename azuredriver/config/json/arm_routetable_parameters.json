@@ -10,7 +10,22 @@
         },
         "route_table_disable_bgp_route_propagation": {
             "value": {{route_table_disable_bgp_route_propagation | tojson}}
+        },
+        "branch_offices": {
+            {% if branch_offices %}
+            "value": {{ branch_offices | tojson}}
+            {% else %}
+            "value": {{[]}}
+            {% endif %}
+        },
+        "route_next_hop_ip_address": {
+            {% if private_subnet_cidr %}
+            "value": "{% set ipsegments = private_subnet_cidr.split('.')%}{{ ('{}.{}.{}.{}'.format(ipsegments[0], ipsegments[1], ipsegments[2], '4')) }}"
+            {% else %}
+            "value": "{{ '' }}"
+            {% endif %}
         }
+        
         
     }
 }
