@@ -33,7 +33,7 @@ app:
       ## WSGI_CONTAINER can be uwsgi or gunicorn
       WSGI_CONTAINER: gunicorn
       ## the number of processes and threads to spawn to handle requests
-      NUM_PROCESSES: "8"
+      NUM_PROCESSES: "9"
       NUM_THREADS: "8"
 
     ## default_config.yml (driver configuration) overrides
@@ -106,10 +106,10 @@ app:
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   resources: 
     limits:
-      cpu: 1
+      cpu: 2
       memory: 2Gi
     requests:
-      cpu: 1
+      cpu: 2
       memory: 1Gi 
 
   ## Autoscaler
