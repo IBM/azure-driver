@@ -9,8 +9,14 @@
    Install azure-driver helm chart 
 
    ```
-     helm install azure-driver azure-driver-0.0.1.tgz --set docker.image=azure-driver--set docker.version=0.0.2 -n <namespace>
-   ```  
+     helm install azure-driver azure-driver-0.0.1.tgz  -n <namespace>
+   ``` 
+
+   To install helm chart with a specific image, image could be pushed to a Docker registry and installed as follows:
+
+   ```
+   helm install azure-driver aws-driver-0.0.1.tgz --set docker.image=[registry]/azure-driver
+   ``` 
 
 ## Configuration
 
@@ -30,16 +36,23 @@
        lmctl resourcedriver add --type azure --url https://azure-driver:7275 --certificate azuredriver-tls.pem -e <lmctl-env-name>
     ```
 
+## Deployment Location
+
+The AZURE driver expects an `AZURE` deployment location with the following properties:
+
+* tenantId: Azure tenant ID
+* clientId: Azure Client ID for the registered application
+* clientSecret: Azure Client Secret for the registered application
+* subscriptionId: Azure Subscription ID
+
 
 ## Scalability
 
-   With Gunicorn support, azure-driver can handle huge traffic with no of processes and threads.
-
-   There are two ways to scale the azure-driver to address  production grade traffic
+  There are two ways to scale the azure-driver to address  production grade traffic
 
    ### 1. By increasing no of processes and threads
 
-      Processes and threads can be configured at the time of installation by setting values to the helm install command as below
+      With Gunicorn support, aws-driver can handle huge traffic by configuring no of processes and threads to the helm install command as below
 
       ```
          helm install azure-driver azure-driver-0.0.1.tgz --set docker.image=azure-driver--set docker.version=0.0.2 --set app.config.env.NUM_PROCESSES=<processes> --set --set app.config.env.NUM_THREADS=<threads> --set resources.requests.cpu=2*<processes>+1  --set resources.limits.cpu=2<processes>+1 -n <namespace>
@@ -51,7 +64,7 @@
     The easiest way to handle huge traffic if the default values are not sufficient is to increase the pod replicas
 
       ```
-        oc scale deploy <deployment-name> --replicas <required-pod-replicas>
+        oc scale deploy azure-driver --replicas <required-pod-replicas>
       ```
      
 
