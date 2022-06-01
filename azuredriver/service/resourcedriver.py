@@ -182,9 +182,8 @@ class ResourceDriverHandler(Service, ResourceDriverHandlerCapability):
         return True if stack_id.find('/providers/') == -1 else False
 
     def is_vnet_peering(self, stack_id):
-        '''This method is used to check if operation is vnet peering.'''
-        return True if stack_id.__contains__("vnet_peering") else False
-
+        return True if stack_id.__contains__("peer") else False
+    
     def __split_request_id(self, request_id):
         return tuple(request_id.split(REQUEST_ID_SEPARATOR))
 
