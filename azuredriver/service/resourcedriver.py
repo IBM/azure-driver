@@ -10,17 +10,16 @@ from ignition.service.resourcedriver import ResourceDriverHandlerCapability, Res
 from ignition.service.resourcedriver import InfrastructureNotFoundError, InvalidRequestError
 from ignition.model.failure import FailureDetails, FAILURE_CODE_INFRASTRUCTURE_ERROR
 from ignition.service.config import ConfigurationPropertiesGroup
-from azuredriver.service.common import *
-from azuredriver.location import *
-from azuredriver.model.exceptions import *
-from azuredriver.service.azureresourcemanager import *
-from .vnet_arm import *
-from .subnet_arm import *
-from .vm_arm import *
-from .nsg_arm import *
-from .routetable_arm import *
-from .storage_account_arm import *
-from .resource_group import *
+from azuredriver.service.common import PropertiesMerger, get_resource_name_from_stackid, DELETE_REQUEST_PREFIX, REQUEST_ID_SEPARATOR, CREATE_REQUEST_PREFIX
+from azuredriver.location import AZUREDeploymentLocation
+from azuredriver.model.exceptions import StackNotFoundError
+from azuredriver.service.azureresourcemanager import StackNameCreator
+from .vnet_arm import VNETResourceManager
+from .subnet_arm import SubnetResourceManager
+from .nsg_arm import NSGResourceManager
+from .routetable_arm import RouteTableResourceManager
+from .storage_account_arm import StorageAccountResourceManager
+from .resource_group import ResourceGroupResourceManager
 
 
 driver_directory = here = Path(__file__).parent.parent
@@ -67,7 +66,6 @@ class ResourceDriverHandler(Service, ResourceDriverHandlerCapability):
             'resource::AzureNetworkSecurityGroup::1.0': NSGResourceManager(),
             'resource::AzureRouteTable::1.0': RouteTableResourceManager(),
             'resource::AzureStorageAccount::1.0': StorageAccountResourceManager(),
-            'resource::AzureVM::1.0': VMResourceManager(),
             'resource::AzureResourceGroup::1.0': ResourceGroupResourceManager()
         }
 
