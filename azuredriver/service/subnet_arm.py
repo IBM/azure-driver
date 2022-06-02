@@ -1,5 +1,6 @@
 '''Python script for Subnet ARM'''
-from azuredriver.service.azureresourcemanager import *
+from azuredriver.service.azureresourcemanager import AzureResourceManager
+import logging
 
 logger = logging.getLogger(__name__)
 

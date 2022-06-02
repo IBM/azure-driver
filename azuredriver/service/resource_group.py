@@ -3,9 +3,9 @@ import logging
 from ignition.model.lifecycle import LifecycleExecuteResponse
 from ignition.service.resourcedriver import ResourceDriverError
 from azuredriver.service.common import CREATE_REQUEST_PREFIX, build_request_id
-from azuredriver.service.azureresourcemanager import *
+from azuredriver.service.azureresourcemanager import AzureResourceManager
 from azuredriver.service.topology import AZUREAssociatedTopology
-
+import re
 
 logger = logging.getLogger(__name__)
 

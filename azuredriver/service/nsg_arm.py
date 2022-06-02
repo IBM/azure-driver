@@ -1,6 +1,7 @@
 '''Python script for NSG ARM'''
 import logging
-from azuredriver.service.azureresourcemanager import *
+import re
+from azuredriver.service.azureresourcemanager import AzureResourceManager
 
 logger = logging.getLogger(__name__)
 
