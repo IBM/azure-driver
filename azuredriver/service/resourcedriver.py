@@ -15,6 +15,7 @@ from azuredriver.location import AZUREDeploymentLocation
 from azuredriver.model.exceptions import StackNotFoundError
 from azuredriver.service.azureresourcemanager import StackNameCreator
 from .vnet_arm import VNETResourceManager
+from .vce_arm import VCEResourceManager
 from .subnet_arm import SubnetResourceManager
 from .nsg_arm import NSGResourceManager
 from .routetable_arm import RouteTableResourceManager
@@ -62,6 +63,7 @@ class ResourceDriverHandler(Service, ResourceDriverHandlerCapability):
         self.props_merger = PropertiesMerger()
         self.handlers = {
             'resource::AzureVNet::1.0': VNETResourceManager(),
+            'resource::AzureVCE::1.0': VCEResourceManager(),
             'resource::AzureSubnet::1.0': SubnetResourceManager(),
             'resource::AzureNetworkSecurityGroup::1.0': NSGResourceManager(),
             'resource::AzureRouteTable::1.0': RouteTableResourceManager(),
