@@ -8,14 +8,12 @@ import json
 import fnmatch
 from ignition.model.lifecycle import LifecycleExecuteResponse
 from ignition.service.templating import ResourceTemplateContextService, Jinja2TemplatingService
-from ignition.service.resourcedriver import InfrastructureNotFoundError, ResourceDriverError
-from ignition.service.resourcedriver import InvalidRequestError
 from azure.core.exceptions import *
-from azuredriver.model.exceptions import *
+from azuredriver.model.exceptions import StackNotFoundError
 from azuredriver.service.common import DELETE_REQUEST_PREFIX
 from azuredriver.service.common import CREATE_REQUEST_PREFIX, build_request_id
 from azuredriver.service.topology import AZUREAssociatedTopology
-from .common import *
+from .common import PropertiesMerger
 
 
 driver_directory = here = Path(__file__).parent.parent
