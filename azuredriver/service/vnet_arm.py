@@ -1,6 +1,6 @@
 '''Python script for VNET ARM'''
 import logging
-from azuredriver.service.azureresourcemanager import *
+from azuredriver.service.azureresourcemanager import AzureResourceManager
 
 
 logger = logging.getLogger(__name__)
