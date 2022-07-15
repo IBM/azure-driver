@@ -14,12 +14,12 @@ from azuredriver.service.common import PropertiesMerger, get_resource_name_from_
 from azuredriver.location import AZUREDeploymentLocation
 from azuredriver.model.exceptions import StackNotFoundError
 from azuredriver.service.azureresourcemanager import StackNameCreator
-from .vnet_arm import VNETResourceManager
-from .subnet_arm import SubnetResourceManager
-from .nsg_arm import NSGResourceManager
-from .routetable_arm import RouteTableResourceManager
-from .storage_account_arm import StorageAccountResourceManager
-from .resource_group import ResourceGroupResourceManager
+from azuredriver.service.vnet_arm import VNETResourceManager
+from azuredriver.service.subnet_arm import SubnetResourceManager
+from azuredriver.service.nsg_arm import NSGResourceManager
+from azuredriver.service.routetable_arm import RouteTableResourceManager
+from azuredriver.service.storage_account_arm import StorageAccountResourceManager
+from azuredriver.service.resource_group import ResourceGroupResourceManager
 
 
 driver_directory = here = Path(__file__).parent.parent

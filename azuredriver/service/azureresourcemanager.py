@@ -14,7 +14,7 @@ from azuredriver.model.exceptions import StackNotFoundError
 from azuredriver.service.common import DELETE_REQUEST_PREFIX
 from azuredriver.service.common import CREATE_REQUEST_PREFIX, build_request_id
 from azuredriver.service.topology import AZUREAssociatedTopology
-from .common import PropertiesMerger
+from azuredriver.service.common import PropertiesMerger
 
 
 driver_directory = here = Path(__file__).parent.parent
