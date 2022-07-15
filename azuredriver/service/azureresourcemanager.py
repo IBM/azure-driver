@@ -8,6 +8,7 @@ import json
 import fnmatch
 from ignition.model.lifecycle import LifecycleExecuteResponse
 from ignition.service.templating import ResourceTemplateContextService, Jinja2TemplatingService
+from ignition.service.resourcedriver import ResourceDriverError, InfrastructureNotFoundError, InvalidRequestError
 from azure.core.exceptions import *
 from azuredriver.model.exceptions import StackNotFoundError
 from azuredriver.service.common import DELETE_REQUEST_PREFIX
