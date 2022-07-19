@@ -84,7 +84,6 @@ class VNETResourceManager(AzureResourceManager):
         associated_topology = AZUREAssociatedTopology()
         associated_topology.add_stack_id(resource_name, stack_id)
         return LifecycleExecuteResponse(request_id, associated_topology=associated_topology)
-
     def removevnetpeering(self, resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location):
         initiator_vnet_name = resource_properties.get('initiator_vnet_name')
         self.__create_vnet_peering_name(system_properties, self.get_resource_name(system_properties), initiator_vnet_name, None)
