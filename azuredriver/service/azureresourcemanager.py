@@ -183,7 +183,7 @@ class AzureResourceManager():
         return LifecycleExecuteResponse(request_id, associated_topology=associated_topology)
 
     # Remove a ARM deployment in AZURE
-    def remove(self, resource_id, lifecycle_name, system_properties, resource_properties, request_properties, associated_topology, azure_location, **kwargs):
+    def remove(self, resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location, **kwargs):
         '''This method is used to remove the resources'''
         if 'skip_delete' in kwargs and kwargs['skip_delete']:
             return LifecycleExecuteResponse(build_request_id(CREATE_REQUEST_PREFIX, 'SKIP'))
