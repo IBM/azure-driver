@@ -18,5 +18,5 @@ class SubnetResourceManager(AzureResourceManager):
     def remove(self, resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location):
         super().create_resource_name(system_properties,
                                      self.get_resource_name(system_properties), None)
-        return super().remove(resource_id, lifecycle_name, system_properties,
+        return super().remove(resource_id, lifecycle_name, driver_files, system_properties,
         resource_properties, request_properties, associated_topology, azure_location)
