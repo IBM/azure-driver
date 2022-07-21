@@ -25,7 +25,7 @@ class VNETResourceManager(AzureResourceManager):
     def remove(self, resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location):
         super().create_resource_name(system_properties,
                                      self.get_resource_name(system_properties), None)
-        return super().remove(resource_id, lifecycle_name, system_properties,
+        return super().remove(resource_id, lifecycle_name, driver_files, system_properties,
         resource_properties, request_properties, associated_topology, azure_location)
 
     def __create_vnet_peering_name(self, system_properties, resource_name, initiator_vnet_name, operation_source_name):
