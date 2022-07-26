@@ -21,7 +21,7 @@
             "value": "{{branch_office_cidr}}"
         },
         "private_static_ip": {
-            "value": "{% set ipsegments = subnet_cidr_block.split('.')%}{{ ('{}.{}.{}.{}'.format(ipsegments[0], ipsegments[1], ipsegments[2], '4')) }}"
+            "value": "{{private_static_ip}}"
         }
   
     }
