@@ -1,5 +1,4 @@
-
+'''Custom Execption class'''
 
 class StackNotFoundError(Exception):
-    pass
-
+    '''This class is used as custom exception'''

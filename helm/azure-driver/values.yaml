@@ -33,14 +33,14 @@ app:
       ## WSGI_CONTAINER can be uwsgi or gunicorn
       WSGI_CONTAINER: gunicorn
       ## the number of processes and threads to spawn to handle requests
-      NUM_PROCESSES: "8"
+      NUM_PROCESSES: "9"
       NUM_THREADS: "8"
 
     ## default_config.yml (driver configuration) overrides
     override:
       messaging:
         # Kafka connection url
-        connection_address: iaf-system-kafka-bootstrap:9092
+        connection_address: cp4na-o-events-kafka-bootstrap:9092
         # timeout waiting for initial version check on Kafka producer/consumer initialisation
         # 10000ms is usually sufficient, increase if problems with NoBrokersAvailable occur
         api_version_auto_timeout_ms: 10000
@@ -104,13 +104,13 @@ app:
   ## Configure resource requests and limits for each container of the application
   ## Default is to have no limit
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  resources: {}
-    # limits:
-    #  cpu: 250m
-    #  memory: 384Mi
-    # requests:
-    #  cpu: 250m
-    #  memory: 384Mi
+  resources: 
+    limits:
+      cpu: 2
+      memory: 2Gi
+    requests:
+      cpu: 2
+      memory: 1Gi 
 
   ## Autoscaler
   ## Enabling this deploys a Horizontal Pod Autoscaler that will monitor the CPU usage and scale this deployment 

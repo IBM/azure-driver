@@ -1,3 +1,4 @@
+'''Main File'''
 from azuredriver.app import init_app
 
 # The main method below is used when running the application on the command line
@@ -5,6 +6,7 @@ from azuredriver.app import init_app
 
 
 def main():
+    '''Main Function'''
     init_app()
 
 

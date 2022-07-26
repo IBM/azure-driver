@@ -1,3 +1,4 @@
+'''Common module'''
 import uuid
 from datetime import datetime
 from ignition.utils.propvaluemap import PropValueMap
@@ -8,7 +9,9 @@ DELETE_REQUEST_PREFIX = 'Delete'
 
 REQUEST_ID_SEPARATOR = '::'
 
+
 def build_request_id(request_type, stack_id):
+    '''This method is used to build the request ID'''
     request_id = request_type
     request_id += REQUEST_ID_SEPARATOR
     request_id += stack_id
@@ -24,16 +27,20 @@ def json_serial(obj):
         return serial
     raise TypeError('Type not serializable')
 
+
 def get_resource_name_from_stackid(stack_id, resource_type_name):
+    '''This method is used to get resource name from stack id'''
     list_elements = stack_id.split('/')
     return list_elements[list_elements.index(resource_type_name)+1]
 
 
 class PropertiesMerger:
+    '''This class is used to merge properties'''
 
     def merge(self, properties, system_properties):
-        new_props = {k:v for k,v in properties.items_with_types()}
-        for k, v in system_properties.items_with_types():
-            new_key = 'system_{0}'.format(k)
-            new_props[new_key] = v
+        '''This method is used to merge properties'''
+        new_props = {k: v for k, v in properties.items_with_types()}
+        for k, value in system_properties.items_with_types():
+            new_key = f"system_{k}"
+            new_props[new_key] = value
         return PropValueMap(new_props)
