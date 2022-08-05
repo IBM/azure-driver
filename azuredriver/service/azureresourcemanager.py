@@ -27,7 +27,7 @@ class StackNameCreator:
 
     def create(self, resource_id, resource_name):
         '''This method is used to create stack name'''
-        potential_name = f"{resource_name}-{resource_id}"
+        potential_name = f"{resource_id}-{resource_name}"
         needs_starting_letter = not potential_name[0].isalpha()
         potential_name = re.sub('[^A-Za-z0-9-._]+', '-', potential_name)
         max_size = 64
