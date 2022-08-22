@@ -1,12 +1,12 @@
 # Releasing the Driver
 
-The following guide details the steps for releasing the Ansible Lifecycle Driver. This may only be performed by a user with admin rights to this Git repository and the `icr.io/cp4na-drivers` IBM Cloud Container Registry.
+The following guide details the steps for releasing the Azure Driver. This may only be performed by a user with admin rights to this Git repository and the `icr.io/cp4na-drivers` IBM Cloud Container Registry.
 
 **Ensure you've followed the steps in [configure your development environment](dev-env.md) as there are libraries required to complete the release.**
 
 ## 1. Ensure Milestone
 
-Ensure there is a milestone created for the release at: [https://github.com/IBM/ansible-lifecycle-driver/milestones](https://github.com/IBM/ansible-lifecycle-driver/milestones).
+Ensure there is a milestone created for the release at: [https://github.com/IBM/azure-driver/milestones](https://github.com/IBM/azure-driver/milestones).
 
 Also ensure all issues going into this release are assigned to this milestone. **Move any issues from unreleased milestones into this release if the code has been merged**
 
@@ -55,7 +55,7 @@ The Docker image has been pushed by the `build.py` script but the documentation 
 
 Complete the following:
 
-- Visit the [releases](https://github.com/IBM/ansible-lifecycle-driver/releases) section of the driver repository
+- Visit the [releases](https://github.com/IBM/azure-driver/releases) section of the driver repository
 - Click `Draft a new release`
 - Input the version the `--version` option earlier as the tag e.g. 1.0.0
 - Use the same value for the `Release title` e.g. 1.0.0
@@ -68,5 +68,5 @@ Complete the following:
 Complete the following steps to ensure development can continue as normal:
 
 - Merge `master` to `develop` (so any release updates and the post-version are copied over from master)
-- Close the Milestone for this release on [Github](https://github.com/IBM/ansible-lifecycle-driver/milestones)
+- Close the Milestone for this release on [Github](https://github.com/IBM/azure-driver/milestones)
 - Create a new Milestone for next release (if one does not exist). Use the value of the `--post-version` option from earlier

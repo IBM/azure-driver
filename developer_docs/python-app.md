@@ -24,7 +24,7 @@ python3 -m unittest
 
 The `setup.py` is a standard file required to manage the installation and distribution of a Python application with the popular [setuptools](https://pypi.org/project/setuptools/) module.
 
-This file defines the metadata of the Python package to be built, including any 3rd party Python modules it depends on. It is configured to include all Python files in the `ansibledriver` package and any files specified in the `MANIFEST.in`.
+This file defines the metadata of the Python package to be built, including any 3rd party Python modules it depends on. It is configured to include all Python files in the `azuredriver` package and any files specified in the `MANIFEST.in`.
 
 This file also specifies the entry points to the application, so a user may run the driver on the command line after installation:
     - `ald-dev` for a development server

@@ -68,7 +68,7 @@ kubectl get pods
 Or:
 
 ```
-helm status ansible-lifecycle-driver
+helm status azure-driver
 ```
 
 ## Transfer Docker Image to Node
@@ -77,17 +77,17 @@ To transfer it to the node you can use `docker save` locally, then `docker load`
 
 Locally:
 ```
-docker save -o ansible-lifecycle-driver-img.tar ansible-lifecycle-driver:<release version number>
+docker save -o azure-driver-img.tar azure-driver:<release version number>
 ```
 
 Transfer the file using scp:
 ```
-scp ansible-lifecycle-driver-img.tar <user>@<worker-node-ip>:/home/<user>
+scp azure-driver-img.tar <user>@<worker-node-ip>:/home/<user>
 ```
 
 On Node:
 ```
-docker load -i /home/<user>/ansible-lifecycle-driver-img.tar
+docker load -i /home/<user>/azure-driver-img.tar
 ```
 
 ## Use Docker Registry
@@ -96,7 +96,7 @@ In a custom **Helm values file** add the following:
 
 ```
 docker:
-  image: <registry host and port>/ansible-lifecycle-driver
+  image: <registry host and port>/azure-driver
   version: <image version>
   imagePullPolicy: IfNotPresent
 ```

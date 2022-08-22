@@ -3,7 +3,7 @@
 The Docker image for this driver includes the following features:
 
 - Installs the driver from a `whl` file created with standard Python setuptools
-- Runs the `gunicorn --workers $NUM_PROCESSES --bind :$DRIVER_PORT $SSL "ansibledriver:create_wsgi_app()"` command to start the driver application with a Gunicorn based container (standard for Python production applications)
+- Runs the `gunicorn --workers $NUM_PROCESSES --bind :$DRIVER_PORT $SSL "azuredriver:create_wsgi_app()"` command to start the driver application with a Gunicorn based container (standard for Python production applications)
 - Supports installing a development version of Ignition from a `whl` file
 - Supports configuring the Gunicorn implementation used at both build and runtime (also includes configuring the number of processes and threads used by container)
 
@@ -46,7 +46,7 @@ Move the whl now in `dist` to the `docker/whls` directory (create the `whls` dir
 ```
 rm -rf ./docker/whls
 mkdir ./docker/whls
-cp dist/ansible_lifecycle_driver-<release version number>-py3-none-any.whl docker/whls/
+cp dist/azuredriver-<release version number>-py3-none-any.whl docker/whls/
 ```
 
 If you need a development version of Ignition, you must build the whl for it and copy it to this directory also.
@@ -55,5 +55,5 @@ Navigate to the Docker directory and build the image. Tag with the release versi
 
 ```
 cd docker
-docker build -t ansible-lifecycle-driver:<release version number> .
+docker build -t azuredriver:<release version number> .
 ```

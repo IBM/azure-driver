@@ -8,8 +8,8 @@ global:
 ## Docker Image for the Openstack VIM Driver
 docker:
   ## Make this the full path, including registry host and port if using one
-  image: azure-driver
-  version: 0.0.2
+  image: icr.io/cp4na-drivers/azure-driver
+  version: ${version}
   imagePullPolicy: IfNotPresent
 
 ## Configuration for the application deployment
