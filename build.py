@@ -156,7 +156,7 @@ class Builder:
   
     def build(self):
         self.init_artifacts_directory()
-        # self.run_unit_tests()
+        self.run_unit_tests()
         self.convert_bicep_files()
         self.build_python_wheel()
         self.pkg_docs()
