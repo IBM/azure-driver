@@ -7,3 +7,4 @@ helm/repo/
 azuredriver.egg-info/
 azuredriver.egg-info/PKG-INFO
 azuredriver.egg-info/SOURCES.txt
+release-artifacts/

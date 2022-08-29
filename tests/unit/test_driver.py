@@ -1,3 +1,4 @@
+import json
 import os
 import time
 import unittest
@@ -7,6 +8,7 @@ from unittest.mock import patch, MagicMock, ANY
 from ignition.utils.file import DirectoryTree
 from ignition.utils.propvaluemap import PropValueMap
 from ignition.model.associated_topology import AssociatedTopology
+from azure.mgmt.resource.resources.models import DeploymentPropertiesExtended, DeploymentExtended, ResourceGroup, ResourceGroupProperties
 from azuredriver.location.deployment_location import AZURE_DEPLOYMENT_STATUS_CREATED, AZUREDeploymentLocation
 from azuredriver.service.resourcedriver import AdditionalResourceDriverProperties, ResourceDriverHandler
 
@@ -139,7 +141,7 @@ class TestDriver(unittest.TestCase):
                 AZUREDeploymentLocation.AZURE_SUBSCRIPTION_ID: 'dummy'
             }
         }
-
+    
     @patch('azuredriver.location.deployment_location.ResourceManagerDriver.create_resourcegroup')
     @patch('azuredriver.location.deployment_location.ResourceManagerDriver.get_resourcegroup')
     def test_Driver_rt(self,  mock_get_resourcegroup, mock_create_resourcegroup):
@@ -156,11 +158,11 @@ class TestDriver(unittest.TestCase):
        # azure_location = AZUREDeploymentLocation.from_dict(deployment_location)
        # azure_location.resourcemanager_driver.get_resourcegroup = mock.Mock(return_value="Primary-test-rg")
         mock_create_resourcegroup.return_value = "/resourceGroups/Primary-test-rg"
-        mock_get_resourcegroup.return_value = {'name': 'Primary-test-rg',  'id' : '/resourceGroups/Primary-test-rg','properties' : {'provisioning_state': AZURE_DEPLOYMENT_STATUS_CREATED}, 'output_resources': {}}
+        mock_get_resourcegroup.return_value = self.__build_mock_deployment_object_resourceGroup()
         create_resp = driver.execute_lifecycle('Create', driver_files, system_properties_rg, resource_properties, request_properties, associated_topology, deployment_location)
         get_resp = driver.get_lifecycle_execution(create_resp.request_id, deployment_location)
         self.assertEqual(create_resp.request_id, get_resp.request_id)
-
+    
     
     @patch('azuredriver.location.deployment_location.ResourceManagerDriver.create_deployment')
     @patch('azuredriver.location.deployment_location.ResourceManagerDriver.get_deployment')
@@ -177,17 +179,18 @@ class TestDriver(unittest.TestCase):
         driver = ResourceDriverHandler()
         associated_topology = AssociatedTopology()
         mock_get_resourcegroup.return_value = "Primary-test-rg"
-        mock_create_deployment.return_value = "/resourceGroups/Primary-test-rg/routeTables/rtTest"
-        mock_get_deployment.return_value = {'name': 'dummy', 'id' : '/resourceGroups/Primary-test-rg/routeTables/rtTest','properties' : {'provisioning_state': AZURE_DEPLOYMENT_STATUS_CREATED}, 'output_resources': {}}
+        mock_create_deployment.return_value = "/resourceGroups/Primary-test-rg/providers/Microsoft.Network/deployments/rtTest"
+        mock_get_deployment.return_value = self.__build_mock_deployment_object_routetable()
         create_resp = driver.execute_lifecycle('Create', driver_files, system_properties_rt, resource_properties_rt, request_properties, associated_topology, deployment_location)
+        print(f'create response route table: {create_resp}')
         get_resp = driver.get_lifecycle_execution(create_resp.request_id, deployment_location)
         self.assertEqual(create_resp.request_id, get_resp.request_id)
-    
+     
     
     @patch('azuredriver.location.deployment_location.ResourceManagerDriver.create_deployment')
     @patch('azuredriver.location.deployment_location.ResourceManagerDriver.get_deployment')
     @patch('azuredriver.location.deployment_location.ResourceManagerDriver.get_resourcegroup')
-    def test_driver_vnet(self, mock_get_resourcegroup, mock_get_deployment, mock_create_deployment):
+    def test_driver_vnet(self, mock_vnet_get_resourcegroup, mock_vnet_get_deployment, mock_vnet_create_deployment):
         system_properties_vnet = self.__system_properties_vnet()
         deployment_location = self.__deployment_location()
         request_properties = self.__request_properties()
@@ -199,11 +202,38 @@ class TestDriver(unittest.TestCase):
         driver = ResourceDriverHandler()
         associated_topology = AssociatedTopology()
         azure_location = AZUREDeploymentLocation.from_dict(deployment_location)
-        mock_get_resourcegroup.return_value = "Primary-test-rg"
-        mock_create_deployment.return_value = "/resourceGroups/Primary-test-rg/vpcs/Primary-test"
-        mock_get_deployment.return_value = {'name': 'dummy', 'id' : '/resourceGroups/Primary-test-rg/vpcs/Primary-test', 'properties': {'provisioning_state': AZURE_DEPLOYMENT_STATUS_CREATED}, 'output_resources': {}}
+        mock_vnet_get_resourcegroup.return_value = "Primary-test-rg"
+        mock_vnet_create_deployment.return_value = "/resourceGroups/Primary-test-rg/providers/Microsoft.Network/deployments/Primary-test"
+        mock_vnet_get_deployment.return_value = self.__build_mock_deployment_object_vnet()
         create_resp = driver.execute_lifecycle('Create', driver_files, system_properties_vnet, resource_properties_vnet, request_properties, associated_topology, deployment_location)
         get_resp = driver.get_lifecycle_execution(create_resp.request_id, deployment_location)
         self.assertEqual(create_resp.request_id, get_resp.request_id)
        
+    def __build_mock_deployment_object_vnet(self):
+        deployment_props = DeploymentPropertiesExtended()
+        deployment_props.provisioning_state = AZURE_DEPLOYMENT_STATUS_CREATED
+        
+        deployment = DeploymentExtended()
+        deployment.location = "/resourceGroups/Primary-test-rg/providers/Microsoft.Network/deployments/Primary-test"
+        deployment.properties = deployment_props 
+        return deployment
+    
+    
+    def __build_mock_deployment_object_routetable(self):
+        deployment_props = DeploymentPropertiesExtended()
+        deployment_props.provisioning_state = AZURE_DEPLOYMENT_STATUS_CREATED
+        
+        deployment = DeploymentExtended()
+        deployment.location = "/resourceGroups/Primary-test-rg/providers/Microsoft.Network/deployments/rtTest"
+        deployment.properties = deployment_props 
+        return deployment 
+     
+    def __build_mock_deployment_object_resourceGroup(self):
+        rg_props = ResourceGroupProperties()
+        rg_props.provisioning_state = AZURE_DEPLOYMENT_STATUS_CREATED
+        
+        rg = ResourceGroup()
+        rg.location = "/resourceGroups/Primary-test-rg"
+        rg.properties = rg_props
+        return rg
         
