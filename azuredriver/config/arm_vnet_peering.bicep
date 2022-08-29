@@ -6,7 +6,7 @@ param allow_forwarded_traffic bool = true
 param allow_gateway_transit bool = false
 param use_remote_gateways bool = false
 param acceptor_vnet_rg_name string = 'mdnrg'
-param subscriptionId string = 'fe42dccb-7208-4832-9ae1-694b971a67a0'
+param subscriptionId string = ''
 
 var acceptor_vnet_id = '/subscriptions/${subscriptionId}/resourceGroups/${acceptor_vnet_rg_name}/providers/Microsoft.Network/virtualNetworks/${acceptor_vnet_name}'
 

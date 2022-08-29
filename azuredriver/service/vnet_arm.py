@@ -67,7 +67,7 @@ class VNETResourceManager(AzureResourceManager):
                     resource_properties.get('initiator_vnet_rg_name'))
                 stack_name = self.get_stack_name(resource_id, resource_name)
                 resource_properties = self.update_resource_properties_with_subscriptionId(resource_properties, azure_location.to_dict())
-                logger.info(f'Updated resource properties for vnet peering: {resource_properties}')
+                logger.debug(f'Updated resource properties for vnet peering: {resource_properties}')
                 arm_template, arm_parameters = self.prepare_deployment_artifacts(
                     system_properties, resource_properties, request_properties,
                      'arm_vnet_peering.json', 'arm_vnet_peering_parameters.json')
@@ -98,5 +98,4 @@ class VNETResourceManager(AzureResourceManager):
         return initiator_vnet_name+"-"+"to"+"-"+acceptor_vnet_name
     
     def update_resource_properties_with_subscriptionId(self, resource_properties, deployment_location):
-        logger.info('printing azure subscription id from deployment location: %s', deployment_location[AZUREDeploymentLocation.PROPERTIES][AZUREDeploymentLocation.AZURE_SUBSCRIPTION_ID])
         return super().add_resource_property(resource_properties, AZUREDeploymentLocation.AZURE_SUBSCRIPTION_ID, 'string', deployment_location[AZUREDeploymentLocation.PROPERTIES][AZUREDeploymentLocation.AZURE_SUBSCRIPTION_ID])
