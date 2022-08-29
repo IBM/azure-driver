@@ -1,12 +1,13 @@
 import os
 import time
 import unittest
+from unittest import mock
 import uuid
 from unittest.mock import patch, MagicMock, ANY
 from ignition.utils.file import DirectoryTree
 from ignition.utils.propvaluemap import PropValueMap
 from ignition.model.associated_topology import AssociatedTopology
-from azuredriver.location.deployment_location import AZUREDeploymentLocation
+from azuredriver.location.deployment_location import AZURE_DEPLOYMENT_STATUS_CREATED, AZUREDeploymentLocation
 from azuredriver.service.resourcedriver import AdditionalResourceDriverProperties, ResourceDriverHandler
 
 class TestDriver(unittest.TestCase):
@@ -103,7 +104,7 @@ class TestDriver(unittest.TestCase):
         props['metricKey'] = {'type': 'string', 'value': 'c748dabe-2d0a-45ee-9725-93a546806ee8'}
         props['requestId'] = {'type': 'string', 'value': '8324ef5f-164c-4ee6-99c1-186ac5524bc4'}
         props['deploymentLocation'] = {'type': 'string', 'value': 'dl-aws-vrantestcluste4'}
-        props['resourceType'] = {'type': 'string', 'value': 'resource::AWSRoute::1.0'}
+        props['resourceType'] = {'type': 'string', 'value': 'resource::AzureRouteTable::1.0'}
         return PropValueMap(props)
 
     
@@ -144,38 +145,17 @@ class TestDriver(unittest.TestCase):
 
     def __resource_properties_rt(self):
         props = {}
-        props['ec2_access_key'] = {'type': 'string', 'value': 'AKIA2Z3UQKJ5L4HNZFUR'}
-        props['ec2_secret_key'] = {'type': 'string', 'value': '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'}
-        props['route_cidr'] = {'type': 'string', 'value': '0.0.0.0/0'}
-        props['route_table_id'] = {'type': 'string', 'value': 'rb-07947ed3b22e0289a'}
+        props['branch_office_cidr'] = {'type': 'string', 'value': '0.0.0.0/0'}
+        props['route_table_location'] = {'type': 'string', 'value': 'centralindia'}
         props['route_table_name'] = {'type': 'string', 'value': 'rtTest'}
-        props['attachment_type'] = {'type': 'string', 'value': 'GatewayId'}
-        props['attachment_id'] = {'type': 'string', 'value': 'igw-02d8eba9ee50f7001'}
+        props['private_static_ip'] = {'type': 'string', 'value': '10.0.2.4/24'}
+        props['private_or_public'] = {'type': 'string', 'value': 'private'}
+        props['local_or_global'] = {'type': 'string', 'value': 'global'}
+        props['route_table_disable_bgp_route_propagation'] = {'type': 'boolean', 'value': False}
+        
 
         return PropValueMap(props)
 
-
-    def __resource_properties_route(self):
-        props = {}
-        props['ec2_access_key'] = {'type': 'string', 'value': 'AKIAQZP7WXUWSL5VK4HV'}
-        props['ec2_secret_key'] = {'type': 'string', 'value': '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'}
-        props['aws_side_asn'] = {'type': 'string', 'value': '64512'}
-        props['vpc_id'] = {'type': 'string', 'value': 'vpc-073c193a752a9ad3a'}
-        props['transit_id'] = {'type': 'string', 'value': 'tgw-06502eb028c110066'}
-        props['transit_route_table_id'] = {'type': 'string', 'value': 'tgw-rtb-0b5895e4a2f5be275'}
-        props['transit_gateway_name'] = {'type': 'string', 'value': 'tgTest'}
-        props['vpc073c193a752a9ad3aAttachment'] = {'type': 'string', 'value': 'tgw-attach-08bfecbd635408bde'}
-        props['subnet_id'] = {'type': 'string', 'value': 'subnet-02e1adc78a85bfcbf'}
-        props['cidr_block'] = {'type': 'string', 'value': '192.0.1.0/24'}
-        props['access_domain_state'] = {'type': 'string', 'value': 'global'}
-        props['propagation_default_route_tableId'] = {'type': 'string', 'value': 'disable'}
-        props['auto_accept_shared_attachments'] = {'type': 'string', 'value': 'disable'}
-        props['default_route_table_association'] = {'type': 'string', 'value': 'disable'}
-        props['default_route_table_propagation'] = {'type': 'string', 'value': 'disable'}
-        props['dns_support'] = {'type': 'string', 'value': 'disable'}
-        props['multicast_support'] = {'type': 'string', 'value': 'disable'}
-        props['vpn_ecmp_support'] = {'type': 'string', 'value': 'disable'}
-        return PropValueMap(props)
 
     def __request_properties(self):
         props = {}
@@ -196,36 +176,70 @@ class TestDriver(unittest.TestCase):
             }
         }
 
-    def test_driver_1(self):
-        system_properties = self.__system_properties()
-        system_properties_vnet = self.__system_properties_vnet()
-        system_properties_rt = self.__system_properties_rt()
+    @patch('azuredriver.location.deployment_location.ResourceManagerDriver.create_resourcegroup')
+    @patch('azuredriver.location.deployment_location.ResourceManagerDriver.get_resourcegroup')
+    def test_Driver_rt(self,  mock_get_resourcegroup, mock_create_resourcegroup):
+        system_properties_rg = self.__system_properties_rg()
         resource_properties = self.__resource_properties()
-        deployment_location = self.__deployment_location()
         request_properties = self.__request_properties()
-        resource_properties_vnet = self.__resource_properties_vnet()
-        request_properties_rt = self.__resource_properties_rt()
-        resource_properties_route = self.__resource_properties_route()
+        deployment_location = self.__deployment_location()
         path = os.path.abspath(os.getcwd())
         print(path)
-        driver_files = DirectoryTree('resources/cloudformation/')
+        driver_files = DirectoryTree('/resources/resourcemanager/')
         print(driver_files.get_path())
         driver = ResourceDriverHandler()
         associated_topology = AssociatedTopology()
-        resp = driver.execute_lifecycle('Create', driver_files, system_properties_vnet, resource_properties_vnet, request_properties, associated_topology, deployment_location)
-        print(f'resp={resp.request_id}')
-        #resp = driver.execute_lifecycle('Create', driver_files, system_properties, resource_properties, request_properties, associated_topology, deployment_location)
-        #print(f'resp={resp.request_id}')
-        #resp = driver.execute_lifecycle('Create', driver_files, system_properties_rt, request_properties_rt, request_properties, associated_topology, deployment_location)
-        #print(f'resp={resp}')
-        #resp = driver.execute_lifecycle('Create', driver_files, system_properties_tg, request_properties_tg, request_properties, associated_topology, deployment_location)
-        #print(f'resp={resp}')
-        #resp = driver.execute_lifecycle('CreateTgwRouteTableAssociation', driver_files, system_properties_tga, request_properties_tga, request_properties, associated_topology, deployment_location)
-        #print(f'resp={resp}')
-        #resp = driver.execute_lifecycle('CreateTgwRouteTableAssociation', driver_files, system_properties_tga1, request_properties_tga1, request_properties, associated_topology, deployment_location)
-        #print(f'resp={resp}')
-        
+       # azure_location = AZUREDeploymentLocation.from_dict(deployment_location)
+       # azure_location.resourcemanager_driver.get_resourcegroup = mock.Mock(return_value="Primary-test-rg")
+        mock_create_resourcegroup.return_value = "/resourceGroups/Primary-test-rg"
+        mock_get_resourcegroup.return_value = {'name': 'Primary-test-rg',  'id' : '/resourceGroups/Primary-test-rg','properties' : {'provisioning_state': AZURE_DEPLOYMENT_STATUS_CREATED}, 'output_resources': {}}
+        create_resp = driver.execute_lifecycle('Create', driver_files, system_properties_rg, resource_properties, request_properties, associated_topology, deployment_location)
+        get_resp = driver.get_lifecycle_execution(create_resp.request_id, deployment_location)
+        self.assertEqual(create_resp.request_id, get_resp.request_id)
 
-        time.sleep(50)
-        resp = driver.get_lifecycle_execution(resp.request_id, deployment_location)
-        print(f'response {resp}')
+    
+    @patch('azuredriver.location.deployment_location.ResourceManagerDriver.create_deployment')
+    @patch('azuredriver.location.deployment_location.ResourceManagerDriver.get_deployment')
+    @patch('azuredriver.location.deployment_location.ResourceManagerDriver.get_resourcegroup')
+    def test_Driver_rt(self, mock_get_resourcegroup, mock_get_deployment, mock_create_deployment):
+        system_properties_rt = self.__system_properties_rt()
+        resource_properties_rt = self.__resource_properties_rt()
+        request_properties = self.__request_properties()
+        deployment_location = self.__deployment_location()
+        path = os.path.abspath(os.getcwd())
+        print(path)
+        driver_files = DirectoryTree('/resources/resourcemanager/')
+        print(driver_files.get_path())
+        driver = ResourceDriverHandler()
+        associated_topology = AssociatedTopology()
+        mock_get_resourcegroup.return_value = "Primary-test-rg"
+        mock_create_deployment.return_value = "/resourceGroups/Primary-test-rg/routeTables/rtTest"
+        mock_get_deployment.return_value = {'name': 'dummy', 'id' : '/resourceGroups/Primary-test-rg/routeTables/rtTest','properties' : {'provisioning_state': AZURE_DEPLOYMENT_STATUS_CREATED}, 'output_resources': {}}
+        create_resp = driver.execute_lifecycle('Create', driver_files, system_properties_rt, resource_properties_rt, request_properties, associated_topology, deployment_location)
+        get_resp = driver.get_lifecycle_execution(create_resp.request_id, deployment_location)
+        self.assertEqual(create_resp.request_id, get_resp.request_id)
+    
+    
+    @patch('azuredriver.location.deployment_location.ResourceManagerDriver.create_deployment')
+    @patch('azuredriver.location.deployment_location.ResourceManagerDriver.get_deployment')
+    @patch('azuredriver.location.deployment_location.ResourceManagerDriver.get_resourcegroup')
+    def test_driver_vnet(self, mock_get_resourcegroup, mock_get_deployment, mock_create_deployment):
+        system_properties_vnet = self.__system_properties_vnet()
+        deployment_location = self.__deployment_location()
+        request_properties = self.__request_properties()
+        resource_properties_vnet = self.__resource_properties_vnet()
+        path = os.path.abspath(os.getcwd())
+        print(path)
+        driver_files = DirectoryTree('/resources/resourcemanager/')
+        print(driver_files.get_path())
+        driver = ResourceDriverHandler()
+        associated_topology = AssociatedTopology()
+        azure_location = AZUREDeploymentLocation.from_dict(deployment_location)
+        mock_get_resourcegroup.return_value = "Primary-test-rg"
+        mock_create_deployment.return_value = "/resourceGroups/Primary-test-rg/vpcs/Primary-test"
+        mock_get_deployment.return_value = {'name': 'dummy', 'id' : '/resourceGroups/Primary-test-rg/vpcs/Primary-test', 'properties': {'provisioning_state': AZURE_DEPLOYMENT_STATUS_CREATED}, 'output_resources': {}}
+        create_resp = driver.execute_lifecycle('Create', driver_files, system_properties_vnet, resource_properties_vnet, request_properties, associated_topology, deployment_location)
+        get_resp = driver.get_lifecycle_execution(create_resp.request_id, deployment_location)
+        self.assertEqual(create_resp.request_id, get_resp.request_id)
+       
+        
