@@ -27,42 +27,6 @@ class TestDriver(unittest.TestCase):
         self.system_properties = self.__system_properties()
         self.resource_properties = self.__resource_properties()
 
-    '''def __deployment_location(self):
-        return {'name': 'mock_location'}
-
-    def __system_properties(self):
-        props = {}
-        props['resourceId'] = '123'
-        props['resourceName'] = 'TestResource'
-        return PropValueMap(props)
-
-    def __resource_properties(self):
-        props = {}
-        props['propA'] = {'type': 'string', 'value': 'valueA'}
-        props['propB'] = {'type': 'string', 'value': 'valueB'}
-        return PropValueMap(props)
-
-    def test_driver_1(self):
-        dl = {
-            'name': "aws1",
-            'properties': {
-                AWSDeploymentLocation.AWS_ACCESS_KEY_ID: 'dummy',
-                AWSDeploymentLocation.AWS_SECRET_ACCESS_KEY: 'dummy'
-            }
-        }
-        driver_files = DirectoryTree('tests/unit/resources/cloudformation')
-        driver = ResourceDriverHandler(self.location_translator, resource_driver_config=self.resource_driver_config)
-        resource_properties = PropValueMap({
-            'EnvironmentName': {
-                'type': 'string',
-                'value': 'sg1'
-            }
-        })
-        # driver.execute_lifecycle('Create', driver_files, self.system_properties, self.resource_properties, {}, AssociatedTopology(), dl)
-        resp = driver.execute_lifecycle('Create', driver_files, self.system_properties, resource_properties, {}, AssociatedTopology(), dl)
-        print(f'resp={resp.request_id}')'''
-
-
     def __system_properties(self):
         props = {}
         props['resourceId'] = {'type': 'string', 'value': str(uuid.uuid4())}
@@ -70,8 +34,8 @@ class TestDriver(unittest.TestCase):
         props['resourceManagerId'] = {'type': 'string', 'value': 'brent'}
         props['metricKey'] = {'type': 'string', 'value': 'c748dabe-2d0a-45ee-9725-93a546806ee8'}
         props['requestId'] = {'type': 'string', 'value': '8324ef5f-164c-4ee6-99c1-186ac5524bc4'}
-        props['deploymentLocation'] = {'type': 'string', 'value': 'dl-aws-vrantestcluste4'}
-        props['resourceType'] = {'type': 'string', 'value': 'resource::AWSSubnet::1.0'}
+        props['deploymentLocation'] = {'type': 'string', 'value': 'dl-azure-vrantestcluste4'}
+        props['resourceType'] = {'type': 'string', 'value': 'resource::azureSubnet::1.0'}
         return PropValueMap(props)
 
     def __system_properties_rg(self):
@@ -81,7 +45,7 @@ class TestDriver(unittest.TestCase):
         props['resourceManagerId'] = {'type': 'string', 'value': 'brent'}
         props['metricKey'] = {'type': 'string', 'value': 'c748dabe-2d0a-45ee-9725-93a546806ee8'}
         props['requestId'] = {'type': 'string', 'value': '8324ef5f-164c-4ee6-99c1-186ac5524bc4'}
-        props['deploymentLocation'] = {'type': 'string', 'value': 'dl-aws-vrantestcluste4'}
+        props['deploymentLocation'] = {'type': 'string', 'value': 'dl-azure-vrantestcluste4'}
         props['resourceType'] = {'type': 'string', 'value': 'resource::AzureResourceGroup::1.0'}
         return PropValueMap(props)
 
@@ -92,7 +56,7 @@ class TestDriver(unittest.TestCase):
         props['resourceManagerId'] = {'type': 'string', 'value': 'brent'}
         props['metricKey'] = {'type': 'string', 'value': 'c748dabe-2d0a-45ee-9725-93a546806ee8'}
         props['requestId'] = {'type': 'string', 'value': '8324ef5f-164c-4ee6-99c1-186ac5524bc4'}
-        props['deploymentLocation'] = {'type': 'string', 'value': 'dl-aws-vrantestcluste4'}
+        props['deploymentLocation'] = {'type': 'string', 'value': 'dl-azure-vrantestcluste4'}
         props['resourceType'] = {'type': 'string', 'value': 'resource::AzureVNet::1.0'}
         return PropValueMap(props)
 
@@ -103,7 +67,7 @@ class TestDriver(unittest.TestCase):
         props['resourceManagerId'] = {'type': 'string', 'value': 'brent'}
         props['metricKey'] = {'type': 'string', 'value': 'c748dabe-2d0a-45ee-9725-93a546806ee8'}
         props['requestId'] = {'type': 'string', 'value': '8324ef5f-164c-4ee6-99c1-186ac5524bc4'}
-        props['deploymentLocation'] = {'type': 'string', 'value': 'dl-aws-vrantestcluste4'}
+        props['deploymentLocation'] = {'type': 'string', 'value': 'dl-azure-vrantestcluste4'}
         props['resourceType'] = {'type': 'string', 'value': 'resource::AzureRouteTable::1.0'}
         return PropValueMap(props)
 

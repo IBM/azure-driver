@@ -39,13 +39,13 @@ To deploy the Helm chart will need Helm installed and initialised against a Kube
 Install the chart with the default configuration using the install command:
 
 ```
-helm install --name ansible-lifecycle-driver <path to chart>
+helm install --name azure-driver <path to chart>
 ```
 
 Configuration for the Helm deployment can be provided with a **Helm values file** on the `-f` option. 
 
 ```
-helm install --name ansible-lifecycle-driver <path to chart> -f <path to Helm values file>
+helm install --name azure-driver <path to chart> -f <path to Helm values file>
 ```
 
 By default, the Deployment included in this chart will expect the driver docker image to be available on the Kubernetes worker node (e.g. the image can be seen in the list returned by `docker images`). If the image is not on the node, you should [transfer the image to the node](#transfer-docker-image-to-node) or [use a docker registry](#use-docker-registry).
