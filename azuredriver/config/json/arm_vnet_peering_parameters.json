@@ -26,8 +26,8 @@
     "acceptor_vnet_rg_name": {
       "value": "{{acceptor_vnet_rg_name}}"
     },
-    "acceptor_vnet_subscription_id": {
-      "value": "{{acceptor_vnet_subscription_id}}"
+    "subscriptionId": {
+      "value": "{{subscriptionId}}"
     }
   }
 }
