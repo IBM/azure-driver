@@ -239,7 +239,8 @@ class AzureResourceManager():
                 f'No stack_id in associated topology for resource with id: {resource_id} name: {resource_name} lifecycle_name: {lifecycle_name}')
             request_id = build_request_id(CREATE_REQUEST_PREFIX, 'SKIP')
 
-        return LifecycleExecuteResponse(request_id)
+        associated_topology.remove_stack_id(resource_name)
+        return LifecycleExecuteResponse(request_id, associated_topology)
 
     def get_vnet_peering_name(self, initiator_vnet_name, acceptor_vnet_name):
         '''This method is used to get vnet peering name'''
