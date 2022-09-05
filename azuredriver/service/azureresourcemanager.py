@@ -6,6 +6,7 @@ import os
 import uuid
 import json
 import fnmatch
+from ignition.utils.propvaluemap import PropValueMap
 from ignition.model.lifecycle import LifecycleExecuteResponse
 from ignition.service.templating import ResourceTemplateContextService, Jinja2TemplatingService
 from ignition.service.resourcedriver import ResourceDriverError, InfrastructureNotFoundError, InvalidRequestError
@@ -252,3 +253,8 @@ class AzureResourceManager():
             resource_name = resource_name + operation_name
         system_properties['resourceName'] = resource_name
         return system_properties['resourceName']
+
+    def add_resource_property(self, resource_properties, key, type, value):
+        resource_property_dict = resource_properties.to_dict()
+        resource_property_dict[key] = {'type': type, 'value': value}
+        return PropValueMap(resource_property_dict)

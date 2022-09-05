@@ -2,6 +2,7 @@
 import logging
 from ignition.model.lifecycle import LifecycleExecuteResponse
 from ignition.service.resourcedriver import ResourceDriverError
+from azuredriver.location import AZUREDeploymentLocation
 from azuredriver.service.azureresourcemanager import AzureResourceManager
 from azuredriver.service.common import CREATE_REQUEST_PREFIX, build_request_id
 from azuredriver.service.topology import AZUREAssociatedTopology
@@ -65,6 +66,8 @@ class VNETResourceManager(AzureResourceManager):
                 azure_location.set_resource_group_name(
                     resource_properties.get('initiator_vnet_rg_name'))
                 stack_name = self.get_stack_name(resource_id, resource_name)
+                resource_properties = self.update_resource_properties_with_subscriptionId(resource_properties, azure_location.to_dict())
+                logger.debug(f'Updated resource properties for vnet peering: {resource_properties}')
                 arm_template, arm_parameters = self.prepare_deployment_artifacts(
                     system_properties, resource_properties, request_properties,
                      'arm_vnet_peering.json', 'arm_vnet_peering_parameters.json')
@@ -84,6 +87,7 @@ class VNETResourceManager(AzureResourceManager):
         associated_topology = AZUREAssociatedTopology()
         associated_topology.add_stack_id(resource_name, stack_id)
         return LifecycleExecuteResponse(request_id, associated_topology=associated_topology)
+    
     def removevnetpeering(self, resource_id, lifecycle_name, driver_files, system_properties, resource_properties, request_properties, associated_topology, azure_location):
         initiator_vnet_name = resource_properties.get('initiator_vnet_name')
         self.__create_vnet_peering_name(system_properties, self.get_resource_name(system_properties), initiator_vnet_name, None)
@@ -93,3 +97,5 @@ class VNETResourceManager(AzureResourceManager):
     def get_vnet_peering_name(self, initiator_vnet_name, acceptor_vnet_name):
         return initiator_vnet_name+"-"+"to"+"-"+acceptor_vnet_name
     
+    def update_resource_properties_with_subscriptionId(self, resource_properties, deployment_location):
+        return super().add_resource_property(resource_properties, AZUREDeploymentLocation.AZURE_SUBSCRIPTION_ID, 'string', deployment_location[AZUREDeploymentLocation.PROPERTIES][AZUREDeploymentLocation.AZURE_SUBSCRIPTION_ID])
