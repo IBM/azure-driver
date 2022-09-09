@@ -6,6 +6,7 @@ import os
 import uuid
 import json
 import fnmatch
+from ignition.utils.propvaluemap import PropValueMap
 from ignition.model.lifecycle import LifecycleExecuteResponse
 from ignition.service.templating import ResourceTemplateContextService, Jinja2TemplatingService
 from ignition.service.resourcedriver import ResourceDriverError, InfrastructureNotFoundError, InvalidRequestError
@@ -239,7 +240,8 @@ class AzureResourceManager():
                 f'No stack_id in associated topology for resource with id: {resource_id} name: {resource_name} lifecycle_name: {lifecycle_name}')
             request_id = build_request_id(CREATE_REQUEST_PREFIX, 'SKIP')
 
-        return LifecycleExecuteResponse(request_id)
+        associated_topology.remove_stack_id(resource_name)
+        return LifecycleExecuteResponse(request_id, associated_topology)
 
     def get_vnet_peering_name(self, initiator_vnet_name, acceptor_vnet_name):
         '''This method is used to get vnet peering name'''
@@ -251,3 +253,8 @@ class AzureResourceManager():
             resource_name = resource_name + operation_name
         system_properties['resourceName'] = resource_name
         return system_properties['resourceName']
+
+    def add_resource_property(self, resource_properties, key, type, value):
+        resource_property_dict = resource_properties.to_dict()
+        resource_property_dict[key] = {'type': type, 'value': value}
+        return PropValueMap(resource_property_dict)
