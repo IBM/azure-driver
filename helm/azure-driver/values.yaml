@@ -8,15 +8,15 @@ global:
 ## Docker Image for the Openstack VIM Driver
 docker:
   ## Make this the full path, including registry host and port if using one
-  image: azure-driver
-  version: 0.0.2
+  image: icr.io/cp4na-drivers/azure-driver
+  version: ${version}
   imagePullPolicy: IfNotPresent
 
 ## Configuration for the application deployment
 app:
   ## Number of pods to deploy 
   replicas: 1
-  ## aws-driver specific configuration
+  ## azure-driver specific configuration
   config:
     ## Configure logging 
     log:
@@ -132,7 +132,7 @@ ingress:
   ## The host used to access the service externally i.e. http://<server.ingress.hostname>/
   ## If not making use of a DNS to resolve this host you must add this to the client hosts file with the K8s IP
   ## E.g.
-  ## 10.220.1.2     aws-driver.lm
+  ## 10.220.1.2     azure-driver.lm
   host: azure-driver.lm
  
 route:

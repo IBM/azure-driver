@@ -2,3 +2,9 @@
 build/*
 dist/*
 docker/whls/*
+helm/repo/
+**/__pycache__/
+azuredriver.egg-info/
+azuredriver.egg-info/PKG-INFO
+azuredriver.egg-info/SOURCES.txt
+release-artifacts/

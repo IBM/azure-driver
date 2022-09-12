@@ -18,7 +18,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'werkzeug==2.0.3',
-        'ignition-framework==3.0.1',
+        'ignition-framework=={0}'.format(_pkg_info['ignition-version']),
         'uwsgi>=2.0.18,<3.0',
         'gunicorn>=19.9.0,<20.0',
         'azure-mgmt-resource==19.0.0',
