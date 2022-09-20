@@ -8,10 +8,10 @@ Replace the content of this file with a user guide for your application
 
 # Install
 
-Install AZURE Driver using Helm:
+Install AZURE Driver using Helm in the namespace where siteplanner installed:
 
 ```
-helm install --name azure-driver azure-driver-0.0.1.tgz
+helm install --name azure-driver azure-driver-0.0.1.tgz -n <namespace>
 ```
 
 Add configuration through a custom Helm values file:
@@ -33,8 +33,9 @@ app:
 Reference the values file on install to apply configuration:
 
 ```
-helm install --name azure-driver azure-driver-0.0.1.tgz -f custom_values.yaml-
+helm install --name azure-driver azure-driver-0.0.1.tgz -n <namespace> -f custom_values.yaml-
 ```
+
 
 ## Helm Configuration
 
@@ -81,7 +82,7 @@ The following table lists configurable parameters of the Application, that may b
   ### 2. Get the cert file from secret
 
      
-    oc get secret azure-driver-tls -o jsonpath="{.data['tls\.crt']}" | base64 -d > azuredriver-tls.pem
+    oc get secret azure-driver-tls -o jsonpath="{.data['tls\.crt']}" | base64 -d > azuredriver-tls.pem -n <namespace>
     
 
   ### 3. Delete if the driver already exists.
