@@ -36,16 +36,16 @@ python3 build.py --skip-docker
 
 To deploy the Helm chart will need Helm installed and initialised against a Kubernetes cluster (e.g. `helm init` on your Kubernetes cluster master node).
 
-Install the chart with the default configuration using the install command:
+Install the chart with the default configuration using the install command and in the namespace where siteplanner installed:
 
 ```
-helm install --name azure-driver <path to chart>
+helm install --name azure-driver <path to chart> -n <namespace>
 ```
 
 Configuration for the Helm deployment can be provided with a **Helm values file** on the `-f` option. 
 
 ```
-helm install --name azure-driver <path to chart> -f <path to Helm values file>
+helm install --name azure-driver <path to chart> -f <path to Helm values file> -n <namespace>
 ```
 
 By default, the Deployment included in this chart will expect the driver docker image to be available on the Kubernetes worker node (e.g. the image can be seen in the list returned by `docker images`). If the image is not on the node, you should [transfer the image to the node](#transfer-docker-image-to-node) or [use a docker registry](#use-docker-registry).
@@ -68,7 +68,7 @@ kubectl get pods
 Or:
 
 ```
-helm status azure-driver
+helm status azure-driver -n <namespace>
 ```
 
 ## Transfer Docker Image to Node
@@ -126,5 +126,33 @@ Note: if the Docker registry is insecure you need to inform the docker daemon (u
     The easiest way to handle huge traffic if the default values are not sufficient is to increase the pod replicas
 
       ```
-        oc scale deploy azure-driver --replicas <required-pod-replicas>
+        oc scale deploy azure-driver --replicas <required-pod-replicas> -n <namespace>
       ```
+
+# Configure driver to resource manager
+
+  ## 1. Configure lmctl
+     
+  Please refer the document to configure lmctl [LMCTL](https://pages.github.ibm.com/tnc/tnc.github.io/technical/development-environment/openshift-development-environment#lmctl)
+
+
+  ## 2. Get the cert file from secret
+
+     
+    oc get secret azure-driver-tls -o jsonpath="{.data['tls\.crt']}" | base64 -d > azuredriver-tls.pem
+    
+
+  ## 3. Delete if the driver already exists.
+       
+  This step is optional. User can apply this if driver is already onboarded
+
+  
+    lmctl resourcedriver delete --type azure <lmctl-env-name>
+  
+
+  ## 4. Add AZURE driver to resource manager
+
+    lmctl resourcedriver add --type azure --url https://azure-driver:7275 --certificate azuredriver-tls.pem <lmctl-env-name>
+    
+
+  With this, resource manager will know there is a driver of type 'azure' and how it can reach the reach the driver.
